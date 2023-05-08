@@ -1,4 +1,5 @@
 import "./globals.css";
+import "../../env";
 
 export const metadata = {
   title: "Practice",
