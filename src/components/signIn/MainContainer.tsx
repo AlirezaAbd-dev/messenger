@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { ReactNode } from "react";
 
-import background from "../../assets/images/vecteezy_3d-render-of-rgb-neon-light-on-darkness-background-abstract_8813833_197.jpg";
+import background from "../../assets/images/background1.jpg";
 
 const MainContainer = ({ children }: { children: ReactNode }) => {
   return (
