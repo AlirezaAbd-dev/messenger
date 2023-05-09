@@ -11,32 +11,53 @@ datasource db {
 }
 
 model User {
-  id            String          @id @unique @default(uuid())
-  email         String          @unique
-  name          String
-  avatar        String?
-  contacts      Json?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  id        String   @id @unique @default(uuid())
+  email     String   @unique
+  name      String
+  avatar    String?
+  status    Status   @default(OFFLINE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contacts      Contact[]       @relation("UserContact")
   Conversations Conversations[] @relation("participants conversation")
   Message       Message[]       @relation("sender")
 }
 
+model Contact {
+  id    String @id @unique @default(uuid())
+  name  String
+  email String @unique
+
+  user   User   @relation("UserContact", fields: [userId], references: [id])
+  userId String
+}
+
 model Conversations {
-  id           String    @id @unique @default(uuid())
+  id String @id @unique @default(uuid())
+
   participants User[]    @relation("participants conversation")
   Message      Message[] @relation("messages")
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Message {
-  id              String        @id @unique @default(uuid())
-  content         String
+  id      String @id @unique @default(uuid())
+  content String
+
   sender          User          @relation("sender", fields: [senderId], references: [id])
   senderId        String
   conversation    Conversations @relation("messages", fields: [conversationsId], references: [id])
   conversationsId String
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  ONLINE
+  OFFLINE
+  OFF
 }
