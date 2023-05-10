@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const middleware = async (req: NextRequest) => {
-  return NextResponse.redirect(new URL("/chat", req.url));
+  return NextResponse.redirect(new URL("/home", req.url));
 };
 
 export const config = {

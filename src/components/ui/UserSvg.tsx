@@ -1,11 +1,11 @@
 const UserSvg = () => {
   return (
-    <div className="absolute -top-11 md:-top-16 bg-gray-800 rounded-full">
+    <div className="absolute -top-11 md:-top-16 bg-yellow-500 rounded-full">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-24 h-24 md:w-36 md:h-36 text-blue-800"
+        className="w-24 h-24 md:w-36 md:h-36 text-gray-700"
       >
         <path
           fillRule="evenodd"
