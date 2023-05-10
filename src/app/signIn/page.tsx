@@ -1,3 +1,4 @@
+"use client";
 import MainContainer from "@/components/signIn/MainContainer";
 import UserSvg from "@/components/ui/UserSvg";
 import Card from "@/components/signIn/Card";
