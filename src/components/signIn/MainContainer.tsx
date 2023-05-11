@@ -5,6 +5,7 @@ import React, { ReactNode } from "react";
 import background from "../../assets/images/background1.jpg";
 
 const MainContainer = ({ children }: { children: ReactNode }) => {
+  document.querySelector("html")?.removeAttribute("ma1");
   return (
     <main className="relative bg-yellow-400 -z-20">
       <form
