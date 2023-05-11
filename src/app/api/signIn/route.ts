@@ -31,7 +31,7 @@ export const POST = async (req: NextRequest) => {
   // End of validating
 
   // Making a random number for sending to user
-  const randomNumber = Math.floor(Math.random() * 1000000);
+  const randomNumber = Math.floor(100000 + Math.random() * 900000);
 
   // set the random number into cache
   cache.set(validatedEmail.data, randomNumber);
