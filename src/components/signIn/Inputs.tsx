@@ -1,13 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { z } from "zod";
 import { shallow } from "zustand/shallow";
 
-import UserSvgSolid from "../ui/UserSvgSolid";
+import { sendEmailAction } from "../../actions/signInActions";
 import useSignInStore from "@/zustand/signInStore";
+import UserSvgSolid from "../ui/UserSvgSolid";
 import LockSvgSolid from "../ui/LockSvgSolid";
 
 const Inputs = () => {
+  const [isPending, startTransition] = useTransition();
   const [isClientLoaded, setIsClientLoaded] = useState(false);
   const {
     isEmailSet,
@@ -30,6 +32,16 @@ const Inputs = () => {
     const result = emailValidate.safeParse(email);
     if (result.success) {
       setIsEmailSet(true);
+      startTransition(() => {
+        sendEmailAction(email)
+          .then((res) => {
+            alert(res);
+          })
+          .catch((err) => {
+            alert("Error");
+            console.log(err);
+          });
+      });
     }
   };
 

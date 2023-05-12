@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 
-import background from "../../assets/images/background1.jpg";
+import background from "../../assets/images/28_Juli_2019_(14).jpg";
 
 const MainContainer = ({ children }: { children: ReactNode }) => {
   return (
@@ -16,7 +16,7 @@ const MainContainer = ({ children }: { children: ReactNode }) => {
           alt="background"
           width={1000}
           height={800}
-          className="absolute h-full w-full background-blur -z-10 "
+          className="absolute h-full w-full -z-10 blur-[10px] md:blur-md"
         />
         {children}
       </form>

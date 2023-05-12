@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 @layer components {
-    .background-blur {
-        filter: blur(18px);
-    }
+  .background-blur {
+    filter: blur(10px);
+  }
 
-    .inner-shadow-t-custom {
-        background-image: linear-gradient(0deg, rgb(55 65 81 / 0.5), transparent);
-    }
+  .inner-shadow-t-custom {
+    background-image: linear-gradient(0deg, rgb(55 65 81 / 0.5), transparent);
+  }
 }

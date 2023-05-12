@@ -1,3 +1,4 @@
+"use client";
 import useSignInStore from "@/zustand/signInStore";
 import { useEffect, useState } from "react";
 
