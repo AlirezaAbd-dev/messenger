@@ -1,3 +1,4 @@
+"use client";
 const UserSvg = () => {
   return (
     <div className="absolute -top-11 md:-top-16 bg-yellow-500 rounded-full">

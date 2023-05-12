@@ -9,7 +9,7 @@ import UserSvgSolid from "../ui/UserSvgSolid";
 import LockSvgSolid from "../ui/LockSvgSolid";
 
 const Inputs = () => {
-  const [isPending, startTransition] = useTransition();
+  const [_isPending, startTransition] = useTransition();
   const [isClientLoaded, setIsClientLoaded] = useState(false);
   const {
     isEmailSet,
