@@ -1,15 +1,13 @@
-"use client";
 import Image from "next/image";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 import background from "../../assets/images/background1.jpg";
 
 const MainContainer = ({ children }: { children: ReactNode }) => {
-  document.querySelector("html")?.removeAttribute("ma1");
   return (
-    <main className="relative bg-yellow-400 -z-20">
+    <>
       <form
-        className={`relative min-h-[700px] h-screen flex flex-col justify-center items-center`}
+        className={`relative min-h-[700px] h-screen flex flex-col justify-center items-center bg-yellow-500 z-0`}
       >
         {/* Background */}
         <Image
@@ -22,7 +20,7 @@ const MainContainer = ({ children }: { children: ReactNode }) => {
         />
         {children}
       </form>
-    </main>
+    </>
   );
 };
 

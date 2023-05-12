@@ -16,7 +16,7 @@ const SignIn = () => {
       </Card>
 
       {/* Submit Button */}
-      {false && <SubmitButton />}
+      <SubmitButton />
     </MainContainer>
   );
 };

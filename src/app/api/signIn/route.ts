@@ -48,5 +48,5 @@ export const POST = async (req: NextRequest) => {
   });
 
   // Response
-  return res.json({ message: "ok" });
+  return res.json({ message: "ایمیل با موفقیت ازسال شد" });
 };
