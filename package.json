@@ -7,8 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "seeder:removeRedis": "node ./seeders/redisRemove.mts"
+    "lint": "next lint"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
