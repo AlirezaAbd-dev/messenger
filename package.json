@@ -1,7 +1,8 @@
 {
-  "name": "practice",
+  "name": "messenger",
   "version": "0.1.0",
   "private": true,
+  "author": "Alireza Abedi",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
