@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse as res } from "next/server";
-import jwt from "jsonwebtoken";
 
-import cache from "@/config/nodeCache";
+import cache from "@/server/config/nodeCache";
 import { signInValidator } from "@/server/validation/signInValidation";
-import prismaClient from "@/config/prismaClient";
+import prismaClient from "@/server/config/prismaClient";
+import createToken from "../utils/createToken";
 
 export const PUT = async (req: NextRequest) => {
   let email: string;
@@ -11,7 +11,10 @@ export const PUT = async (req: NextRequest) => {
   try {
     [email, OTP] = await req?.json().then((res) => [res.email, res.OTP]);
   } catch (err) {
-    return res.json({ message: "مشکلی در سرور پیش آمد!", error: err });
+    return res.json(
+      { message: "مشکلی در سرور پیش آمد!", error: err },
+      { status: 500 }
+    );
   }
 
   const validatedData = signInValidator.safeParse({ email, OTP });
@@ -25,7 +28,12 @@ export const PUT = async (req: NextRequest) => {
     );
   }
 
-  const cachedData = <string | undefined>await cache.take(email);
+  let cachedData;
+  try {
+    cachedData = <string | undefined>await cache.take(email);
+  } catch (err) {
+    return res.json({ message: "رمز یکبار مصرف اشتباه است!" }, { status: 400 });
+  }
 
   if (!cachedData) {
     return res.json({ message: "رمز یکبار مصرف اشتباه است!" }, { status: 400 });
@@ -35,26 +43,18 @@ export const PUT = async (req: NextRequest) => {
     return res.json({ message: "رمز یکبار مصرف اشتباه است!" }, { status: 400 });
   }
 
-  prismaClient.user
-    .create({
-      data: {
+  try {
+    const findUser = await prismaClient.user.findFirst({
+      where: {
         email,
-        name: "",
       },
-    })
-    .then((resolve) => {
-      const verifyToken = jwt.sign(
-        { email: resolve.email },
-        process.env.JWT_VERIFY_SECRET,
-        { expiresIn: "15m" }
-      );
-      const refreshToken = jwt.sign(
-        { email: resolve.email },
-        process.env.JWT_REFRESH_SECRET
-      );
+    });
+
+    if (findUser) {
+      const { verifyToken, refreshToken } = await createToken(findUser.email);
 
       return res.json(
-        { message: "مخاطب با موفقیت ساخته شد" },
+        { message: "با موفقیت وارد حساب خود شدید" },
         {
           headers: {
             "x-auth-token": verifyToken,
@@ -62,8 +62,31 @@ export const PUT = async (req: NextRequest) => {
           },
         }
       );
-    })
-    .catch((err) => {
-      return res.json({ message: err.message, error: err }, { status: 500 });
+    }
+  } catch (err: any) {
+    return res.json({ message: err.message, error: err }, { status: 500 });
+  }
+
+  try {
+    const createdUser = await prismaClient.user.create({
+      data: {
+        email,
+        name: "",
+      },
     });
+
+    const { verifyToken, refreshToken } = await createToken(createdUser.email);
+
+    return res.json(
+      { message: "با موفقیت وارد حساب خود شدید" },
+      {
+        headers: {
+          "x-auth-token": verifyToken,
+          "x-refresh-token": refreshToken,
+        },
+      }
+    );
+  } catch (err: any) {
+    return res.json({ message: err.message, error: err }, { status: 500 });
+  }
 };

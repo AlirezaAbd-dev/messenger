@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse as res } from "next/server";
 
-import cache from "@/config/nodeCache";
-import transport from "@/config/mailTransport";
+import cache from "@/server/config/nodeCache";
+import transport from "@/server/config/mailTransport";
 import { sendEmailValidator } from "@/server/validation/signInValidation";
 
 export const POST = async (req: NextRequest) => {
