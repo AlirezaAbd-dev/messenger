@@ -19,6 +19,7 @@ const Inputs = () => {
     setEmail,
     setIsEmailSet,
     setTimer,
+    startTimer,
     setOTP,
   } = useSignInStore((state) => ({ ...state }), shallow);
 
@@ -38,8 +39,9 @@ const Inputs = () => {
             alert(res);
           })
           .catch((err) => {
-            alert("Error");
-            console.log(err);
+            startTimer(0);
+            alert(err.message);
+            console.error(err);
           });
       });
     }

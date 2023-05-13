@@ -29,18 +29,20 @@ export const PUT = async (req: NextRequest) => {
   }
 
   let cachedData;
-  try {
-    cachedData = <string | undefined>await cache.take(email);
-  } catch (err) {
-    return res.json({ message: "رمز یکبار مصرف اشتباه است!" }, { status: 400 });
-  }
-
+  cachedData = <string | undefined>await cache.get(email);
+  console.log(cachedData);
   if (!cachedData) {
     return res.json({ message: "رمز یکبار مصرف اشتباه است!" }, { status: 400 });
   }
 
-  if (+OTP !== +cachedData) {
+  if (OTP !== Number(cachedData)) {
     return res.json({ message: "رمز یکبار مصرف اشتباه است!" }, { status: 400 });
+  }
+
+  try {
+    cache.del(email);
+  } catch (err) {
+    return res.json({ message: "مشکلی در سرور پیش آمد!" }, { status: 500 });
   }
 
   try {
@@ -56,6 +58,7 @@ export const PUT = async (req: NextRequest) => {
       return res.json(
         { message: "با موفقیت وارد حساب خود شدید" },
         {
+          status: 200,
           headers: {
             "x-auth-token": verifyToken,
             "x-refresh-token": refreshToken,
@@ -80,6 +83,7 @@ export const PUT = async (req: NextRequest) => {
     return res.json(
       { message: "با موفقیت وارد حساب خود شدید" },
       {
+        status: 201,
         headers: {
           "x-auth-token": verifyToken,
           "x-refresh-token": refreshToken,

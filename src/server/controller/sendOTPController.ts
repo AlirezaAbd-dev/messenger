@@ -29,20 +29,25 @@ export const POST = async (req: NextRequest) => {
   const randomNumber = Math.floor(100000 + Math.random() * 900000);
 
   // set the random number into cache
-  cache.set(validatedEmail.data, randomNumber);
+  cache.set(validatedEmail.data, randomNumber, 600);
 
-  // sending email to user
-  const emailResponse = await transport.sendMail({
-    from: process.env.NODEMAILER_USER,
-    to: validatedEmail.data,
-    subject: "کد یکبار مصرف پیامرسان",
-    text: `کد یکبار مصرف: 
+  try {
+    // sending email to user
+    const emailResponse = await transport.sendMail({
+      from: process.env.NODEMAILER_USER,
+      to: validatedEmail.data,
+      subject: "کد یکبار مصرف پیامرسان",
+      text: `کد یکبار مصرف: 
       ${randomNumber}
       لطفا این کد را در اختیار دیگران قرار ندهید.
       `,
-  });
+    });
 
-  if (emailResponse.accepted) {
-    return res.json({ message: "ایمیل با موفقیت ارسال شد" }, { status: 200 });
+    if (emailResponse.accepted) {
+      return res.json({ message: "ایمیل با موفقیت ارسال شد" }, { status: 200 });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.json({ message: "مشکلی در سرور پیش آمد!" }, { status: 500 });
   }
 };
