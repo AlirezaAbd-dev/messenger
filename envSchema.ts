@@ -8,4 +8,5 @@ export default z.object({
   NODEMAILER_PASS: z.string(),
   REDIS_URI: z.string(),
   REDIS_TOKEN_KEY: z.string(),
+  MONGO_URI: z.string(),
 });
