@@ -8,6 +8,9 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      fontFamily: {
+        yekan: ["var(--var-yekan-font)"],
+      },
       colors: {},
     },
   },
