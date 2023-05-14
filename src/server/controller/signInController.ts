@@ -4,6 +4,8 @@ import cache from "@/server/config/nodeCache";
 import { signInValidator } from "@/server/validation/signInValidation";
 import prismaClient from "@/server/config/prismaClient";
 import createToken from "../utils/createToken";
+import dbConnect from "../config/dbConnect";
+import UserModel from "../models/UserModel";
 
 export const PUT = async (req: NextRequest) => {
   let email: string;
@@ -46,11 +48,9 @@ export const PUT = async (req: NextRequest) => {
   }
 
   try {
-    const findUser = await prismaClient.user.findFirst({
-      where: {
-        email,
-      },
-    });
+    await dbConnect();
+
+    const findUser = await UserModel.findOne({ email });
 
     if (findUser) {
       const { verifyToken, refreshToken } = await createToken(findUser.email);
@@ -71,12 +71,7 @@ export const PUT = async (req: NextRequest) => {
   }
 
   try {
-    const createdUser = await prismaClient.user.create({
-      data: {
-        email,
-        name: "",
-      },
-    });
+    const createdUser = new UserModel({ email, name: "" });
 
     const { verifyToken, refreshToken } = await createToken(createdUser.email);
 

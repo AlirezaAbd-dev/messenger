@@ -1,4 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Date } from "mongoose";
+
+interface ConversationSchema {
+  name: string;
+  avatar: string;
+  role: "PRIVATE" | "GROUP";
+  participants: mongoose.ObjectId;
+  messages: mongoose.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const conversationSchema = new mongoose.Schema(
   {
@@ -8,7 +18,8 @@ const conversationSchema = new mongoose.Schema(
     },
     avatar: { type: String, required: false },
     role: {
-      type: "private" || "group",
+      type: String,
+      enum: ["PRIVATE", "GROUP"],
       required: true,
     },
     participants: {
