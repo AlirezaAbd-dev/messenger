@@ -12,9 +12,10 @@ const SubmitButton = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const isEmailSet = useSignInStore((state) => state.isEmailSet);
-  const { email, OTP } = useSignInStore((state) => ({
+  const { email, OTP, setOTP } = useSignInStore((state) => ({
     email: state.email,
     OTP: state.OTP,
+    setOTP: state.setOTP,
   }));
 
   const router = useRouter();
@@ -43,9 +44,11 @@ const SubmitButton = () => {
         setIsLoading(false);
         console.error(err);
         toast.error(err.message);
+      } finally {
+        setOTP(null);
       }
     }
-  }, [email, OTP, router]);
+  }, [email, OTP, setOTP, router]);
 
   if (isPageLoaded && isEmailSet) {
     return (
