@@ -1,6 +1,7 @@
 import "./globals.css";
 import "../../env";
-import { NextRequest } from "next/server";
+
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Messenger",
@@ -10,7 +11,20 @@ export const metadata = {
 export default async function RootLayout(props: any) {
   return (
     <html lang="fa">
-      <body dir="rtl">{props.children}</body>
+      <body dir="rtl">
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              borderRadius: "17px",
+              background: "#333",
+              color: "#fff",
+            },
+          }}
+        />
+        {props.children}
+      </body>
     </html>
   );
 }
