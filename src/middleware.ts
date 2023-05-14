@@ -17,4 +17,8 @@ const middleware = async (req: NextRequest) => {
   }
 };
 
+export const config = {
+  matcher: ["/", "/api/:path*"],
+};
+
 export default middleware;

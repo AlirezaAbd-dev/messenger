@@ -25,6 +25,9 @@ const SubmitButton = () => {
   }, []);
 
   const onClickSignInHandler = useCallback(async () => {
+    if (OTP === null || OTP <= 99999) {
+      toast.error("لطفا کد ارسالی را وارد نمایید");
+    }
     if (email.trim() !== "" && OTP && +OTP >= 99999) {
       try {
         setIsLoading(true);

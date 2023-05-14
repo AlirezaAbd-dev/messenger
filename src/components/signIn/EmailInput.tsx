@@ -39,6 +39,8 @@ const EmailInput = () => {
             toast.error(err.message);
           });
       });
+    } else {
+      toast.error("لطفا ایمیل را به درستی وارد نمایید");
     }
   };
 
