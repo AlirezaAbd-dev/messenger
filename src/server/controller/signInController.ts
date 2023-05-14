@@ -2,7 +2,6 @@ import { NextRequest, NextResponse as res } from "next/server";
 
 import cache from "@/server/config/nodeCache";
 import { signInValidator } from "@/server/validation/signInValidation";
-import prismaClient from "@/server/config/prismaClient";
 import createToken from "../utils/createToken";
 import dbConnect from "../config/dbConnect";
 import UserModel from "../models/UserModel";
