@@ -1,12 +1,16 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ScaleLoader } from "react-spinners";
+import { toast } from "react-hot-toast";
 
 import useSignInStore from "@/zustand/signInStore";
 import { signInAction } from "@/actions/signInActions";
 
 const SubmitButton = () => {
   const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const isEmailSet = useSignInStore((state) => state.isEmailSet);
   const { email, OTP } = useSignInStore((state) => ({
     email: state.email,
@@ -22,18 +26,23 @@ const SubmitButton = () => {
   const onClickSignInHandler = useCallback(async () => {
     if (email.trim() !== "" && OTP && +OTP >= 99999) {
       try {
+        setIsLoading(true);
         // Sending data to server for signIn
         const { message, verifyToken, refreshToken } = await signInAction(
           email,
           OTP
-        ).then((res) => ({ ...res }));
+        ).then((res) => {
+          setIsLoading(false);
+          return { ...res };
+        });
         // Saving tokens in localStorage and relocate
         localStorage.setItem("verify-token", verifyToken);
         localStorage.setItem("refresh-token", refreshToken);
         router.replace("/home");
       } catch (err: any) {
+        setIsLoading(false);
         console.error(err);
-        alert(err.message);
+        toast.error(err.message);
       }
     }
   }, [email, OTP, router]);
@@ -42,10 +51,15 @@ const SubmitButton = () => {
     return (
       <button
         type="button"
+        disabled={isLoading}
         onClick={onClickSignInHandler}
         className="text-lg w-36 h-12 md:w-64 md:h-12 flex justify-center items-center rounded-b-3xl inner-shadow-t-custom text-yellow-500"
       >
-        ورود
+        {isLoading ? (
+          <ScaleLoader color="rgb(234 179 8 / 1)" width={4} height={10} />
+        ) : (
+          "ورود"
+        )}
       </button>
     );
   }
