@@ -4,7 +4,7 @@ import cache from "@/server/config/nodeCache";
 import { signInValidator } from "@/server/validation/signInValidation";
 import createToken from "../utils/createToken";
 import dbConnect from "../config/dbConnect";
-import UserModel from "../models/UserModel";
+import UserModel, { UserSchema } from "../models/UserModel";
 
 export const PUT = async (req: NextRequest) => {
   let email: string;
@@ -30,8 +30,12 @@ export const PUT = async (req: NextRequest) => {
   }
 
   let cachedData;
-  cachedData = <string | undefined>await cache.get(email);
-  console.log(cachedData);
+  try {
+    cachedData = <string | undefined>await cache.get(email);
+  } catch (err) {
+    return res.json({ message: "مشکلی در سرور پیش آمد!", error: err });
+  }
+
   if (!cachedData) {
     return res.json({ message: "رمز یکبار مصرف اشتباه است!" }, { status: 400 });
   }
@@ -48,8 +52,15 @@ export const PUT = async (req: NextRequest) => {
 
   try {
     await dbConnect();
+  } catch (err) {
+    return res.json({
+      message: "مشکلی در اتصال به پایگاه داده پیش آمد!",
+      error: err,
+    });
+  }
 
-    const findUser = await UserModel.findOne({ email });
+  try {
+    const findUser = await UserModel.findOne<UserSchema>({ email });
 
     if (findUser) {
       const { verifyToken, refreshToken } = await createToken(findUser.email);
@@ -70,7 +81,18 @@ export const PUT = async (req: NextRequest) => {
   }
 
   try {
-    const createdUser = new UserModel({ email, name: "" });
+    const createdUser: UserSchema = await UserModel.create({
+      email,
+      name: "",
+      status: "OFFLINE",
+    })
+      .then((res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     const { verifyToken, refreshToken } = await createToken(createdUser.email);
 

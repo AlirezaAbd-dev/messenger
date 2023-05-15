@@ -1,13 +1,18 @@
 import mongoose from "mongoose";
 
 const dbConnect = async () => {
-  if (mongoose.connections[0].readyState === 1) {
-    return;
-  }
-
-  await mongoose.connect(process.env.MONGO_URI).then(() => {
-    console.log("db connected!");
-  });
+  return (
+    (!mongoose.connections[0].readyState &&
+      (await mongoose
+        .connect(process.env.MONGO_URI)
+        .then(() => {
+          console.log("db connected!");
+        })
+        .catch((err) => {
+          console.log(err);
+        }))) ||
+    null
+  );
 };
 
 export default dbConnect;

@@ -1,15 +1,15 @@
-import mongoose, { Date } from "mongoose";
+import mongoose from "mongoose";
 
-interface UserSchema {
+export interface UserSchema {
   email: string;
   name: string;
-  avatar: string;
+  avatar?: string;
   status: "OFF" | "OFFLINE" | "ONLINE";
-  contacts: mongoose.ObjectId[];
-  conversations: mongoose.ObjectId[];
-  messages: mongoose.ObjectId[];
-  createdAt: Date;
-  updatedAt: Date;
+  contacts?: mongoose.Types.ObjectId[];
+  conversations?: mongoose.Types.ObjectId[];
+  messages?: mongoose.Types.ObjectId[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const userSchema = new mongoose.Schema<UserSchema>(
@@ -19,8 +19,14 @@ const userSchema = new mongoose.Schema<UserSchema>(
       unique: true,
       required: true,
     },
-    name: String,
-    avatar: String,
+    name: {
+      type: "String",
+      default: "",
+    },
+    avatar: {
+      type: "String",
+      required: false,
+    },
     status: {
       type: String,
       enum: ["OFF", "OFFLINE", "ONLINE"],
@@ -43,6 +49,8 @@ const userSchema = new mongoose.Schema<UserSchema>(
   { timestamps: true }
 );
 
-const UserModel = mongoose.model("User", userSchema);
+const UserModel =
+  mongoose.models.User<UserSchema> ||
+  mongoose.model<UserSchema>("User", userSchema);
 
 export default UserModel;

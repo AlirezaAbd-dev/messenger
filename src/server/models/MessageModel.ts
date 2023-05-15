@@ -1,16 +1,16 @@
-import mongoose, { Date } from "mongoose";
+import mongoose from "mongoose";
 
 interface MessageSchema {
   content: string;
   seen: boolean;
-  senderId: mongoose.ObjectId;
-  conversationId: mongoose.ObjectId;
-  replyId: mongoose.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  senderId: mongoose.Types.ObjectId;
+  conversationId: mongoose.Types.ObjectId;
+  replyId: mongoose.Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const messageSchema = new mongoose.Schema(
+const messageSchema = new mongoose.Schema<MessageSchema>(
   {
     content: {
       type: String,
@@ -27,15 +27,19 @@ const messageSchema = new mongoose.Schema(
     conversationId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Conversation",
+      required: true,
     },
     replyId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "Message",
+      required: false,
     },
   },
   { timestamps: true }
 );
 
-const MessageModel = mongoose.model("Message", messageSchema);
+const MessageModel =
+  mongoose.models.Message<MessageSchema> ||
+  mongoose.model<MessageSchema>("Message", messageSchema);
 
 export default MessageModel;

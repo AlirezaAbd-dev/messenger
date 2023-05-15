@@ -1,16 +1,16 @@
-import mongoose, { Date } from "mongoose";
+import mongoose from "mongoose";
 
 interface ConversationSchema {
   name: string;
   avatar: string;
   role: "PRIVATE" | "GROUP";
-  participants: mongoose.ObjectId;
-  messages: mongoose.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  participants: mongoose.Types.ObjectId[];
+  messages: mongoose.Types.ObjectId[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const conversationSchema = new mongoose.Schema(
+const conversationSchema = new mongoose.Schema<ConversationSchema>(
   {
     name: {
       type: String,
@@ -34,6 +34,8 @@ const conversationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ConversationModel = mongoose.model("Conversation", conversationSchema);
+const ConversationModel =
+  mongoose.models.Conversation<ConversationSchema> ||
+  mongoose.model<ConversationSchema>("Conversation", conversationSchema);
 
 export default ConversationModel;
