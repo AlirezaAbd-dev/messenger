@@ -4,14 +4,14 @@ import Avatar from "../../assets/images/vecteezy_abstract-black-gradient-geometr
 
 const ConversationCard = () => {
   return (
-    <li className="flex justify-start items-center border-b-2 border-zinc-700 h-24 p-4 cursor-pointer">
+    <li className="flex justify-start items-center border-b-2 border-zinc-700 px-4 py-2 cursor-pointer">
       <Image
         src={Avatar.src}
         alt="Avatar"
         priority
         width={100}
         height={100}
-        className="rounded-full aspect-square w-16 h-16 ml-2"
+        className="rounded-full aspect-square w-14 h-14 ml-2"
       />
       <div className="flex flex-col justify-between flex-grow">
         <div className="flex justify-between">

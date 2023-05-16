@@ -1,12 +1,14 @@
+import Header from "@/components/conversation/Header";
+
 const ConversationChat = () => {
   return (
     <section className="flex flex-col justify-start items-center col-span-3 h-full">
       {/* Header */}
-      <div></div>
+      <Header />
       {/* Chat Section */}
-      <div></div>
+      <main></main>
       {/* Message Tools */}
-      <div></div>
+      <footer></footer>
     </section>
   );
 };
