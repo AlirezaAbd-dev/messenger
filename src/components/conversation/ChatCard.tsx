@@ -7,7 +7,7 @@ const ChatCard = (props: { isYou: boolean }) => {
         }  rounded-lg`}
       >
         <p
-          className="whitespace-pre-line max-w-xs md:max-w-5xl overflow-hidden"
+          className="whitespace-pre-line max-w-[250px] sm:max-w-[500px] md:max-w-xl lg:max-w-3xl xl:max-w-5xl overflow-hidden"
           style={{
             overflowWrap: "break-word",
           }}
