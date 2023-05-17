@@ -11,7 +11,7 @@ const ConversationCard = () => {
         priority
         width={100}
         height={100}
-        className="rounded-full aspect-square w-14 h-14 ml-2"
+        className="rounded-full aspect-square w-14 h-14 ml-2 border border-green-500"
       />
       <div className="flex flex-col justify-between flex-grow">
         <div className="flex justify-between">
