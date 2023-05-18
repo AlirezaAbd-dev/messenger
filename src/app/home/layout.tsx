@@ -7,7 +7,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       {/* Main Navbar */}
       <NavbarLayout />
 
-      <div className="h-full grid grid-rows-1 grid-cols-1 md:grid-cols-4">
+      <div className="h-full grid grid-rows-1 grid-cols-1 md:grid-cols-4 pb-24 md:pb-10">
         {/* Sidebar */}
         <MainSidebar />
 

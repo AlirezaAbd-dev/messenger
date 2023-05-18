@@ -5,7 +5,7 @@ import OptionsIconSvg from "@/components/ui/OptionsIconSvg";
 
 const Header = () => {
   return (
-    <header className="flex justify-between items-center w-full h-14 shadow-xl">
+    <header className="flex justify-between items-center w-full h-14 shadow-xl py-2">
       {/* Avatar And Name */}
       <div className="flex">
         <Image
