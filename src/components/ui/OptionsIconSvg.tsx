@@ -6,7 +6,7 @@ const OptionsIconSvg = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-8 h-8 rotate-90 cursor-pointer"
+      className="w-8 h-8 rotate-90 cursor-pointer hover:text-yellow-500"
     >
       <path
         strokeLinecap="round"
