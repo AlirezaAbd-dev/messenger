@@ -1,4 +1,19 @@
-const ChatCard = (props: { isYou: boolean }) => {
+import CheckedCircleLogoSvg from "../ui/CheckedCircleLogoSvg";
+import CheckedLogoSvg from "../ui/CheckedLogoSvg";
+import PendingClockLogoSvg from "../ui/PendingClockLogoSvg";
+
+const ChatCard = (props: {
+  isYou: boolean;
+  seen?: boolean;
+  pending?: boolean;
+}) => {
+  const messageState =
+    (props.isYou && !props.pending && props.seen === true && (
+      <CheckedCircleLogoSvg />
+    )) ||
+    (props.isYou && !props.pending && !props.seen && <CheckedLogoSvg />) ||
+    (props.isYou && props.pending && <PendingClockLogoSvg />);
+
   return (
     <li className={`flex ${props.isYou ? "justify-start" : "justify-end"}`}>
       <div
@@ -18,11 +33,12 @@ const ChatCard = (props: { isYou: boolean }) => {
           harum est.
         </p>
         <div
-          className={`flex ${
+          className={`flex items-center ${
             props.isYou ? "justify-start" : "justify-end"
           } w-full`}
         >
-          <span className="mx-3 text-xs mt-2">23:45</span>
+          {messageState}
+          <span className="text-xs mt-2">23:45</span>
         </div>
       </div>
     </li>

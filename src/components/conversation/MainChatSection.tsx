@@ -3,10 +3,10 @@ import ChatCard from "./ChatCard";
 const MainChatSection = () => {
   return (
     <ul className="flex flex-col list-none">
-      <ChatCard isYou={true} />
+      <ChatCard seen={true} pending={false} isYou={true} />
       <ChatCard isYou={false} />
-      <ChatCard isYou={true} />
-      <ChatCard isYou={true} />
+      <ChatCard seen={false} pending={false} isYou={true} />
+      <ChatCard seen={false} pending={true} isYou={true} />
       <ChatCard isYou={false} />
       <ChatCard isYou={false} />
     </ul>
