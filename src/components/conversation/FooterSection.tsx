@@ -7,7 +7,6 @@ import PaperClipSvg from "../ui/PaperClipSvg";
 const FooterSection = () => {
   const onInputHandler = (e: React.FormEvent<HTMLTextAreaElement>) => {
     e.currentTarget.style.height = e.currentTarget.scrollHeight - 20 + "px";
-    console.log(e.currentTarget.scrollHeight - 10);
   };
 
   return (
@@ -16,8 +15,9 @@ const FooterSection = () => {
         <SendLogoSvg />
         <div className="flex-grow">
           <textarea
-            className="w-full h-auto min-h-max px-2 bg-transparent outline-none resize-none"
-            style={{ minHeight: "50px", maxHeight: "200px" }}
+          placeholder="پیام"
+            className="w-full h-auto px-2 bg-transparent outline-none resize-none"
+            style={{ minHeight: "23px", maxHeight: "200px" }}
             onChange={onInputHandler}
           ></textarea>
         </div>
