@@ -12,10 +12,10 @@ import AddContactSvg from "../ui/AddContactSvg";
 
 const tabs = [
   {
-    name: "مکالمات",
+    name: "مخاطبین",
   },
   {
-    name: "مخاطبین",
+    name: "مکالمات",
   },
 ];
 
@@ -37,7 +37,7 @@ const MainSidebar = () => {
         isInSlug && "hidden"
       } md:block md:col-span-1 col-span-4 h-full md:border-l md:border-zinc-700 overflow-y-auto pb-16 `}
     >
-      <Tab.Group>
+      <Tab.Group defaultIndex={1}>
         {/* Tabs */}
         <Tab.List className="w-full flex justify-evenly py-2">
           {tabs.map((t, index) => (
@@ -45,10 +45,6 @@ const MainSidebar = () => {
           ))}
         </Tab.List>
         <Tab.Panels>
-          {/* Conversation Panel */}
-          <Tab.Panel>
-            <ConversationsPanel />
-          </Tab.Panel>
           {/* Contacts Panel */}
           <Tab.Panel>
             <ul className="list-none flex flex-col">
@@ -73,6 +69,10 @@ const MainSidebar = () => {
                 </div>
               </li>
             </ul>
+          </Tab.Panel>
+          {/* Conversation Panel */}
+          <Tab.Panel>
+            <ConversationsPanel />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
