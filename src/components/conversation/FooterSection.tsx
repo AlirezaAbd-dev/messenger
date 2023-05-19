@@ -1,13 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import SendLogoSvg from "../ui/SendLogoSvg";
 import PaperClipSvg from "../ui/PaperClipSvg";
 
 const FooterSection = () => {
-  const onInputHandler = (e: React.FormEvent<HTMLTextAreaElement>) => {
-    e.currentTarget.style.height = e.currentTarget.scrollHeight - 20 + "px";
-  };
+  const onInputHandler = useCallback(
+    (e: React.FormEvent<HTMLTextAreaElement>) => {
+      e.currentTarget.style.height = e.currentTarget.scrollHeight - 20 + "px";
+    },
+    []
+  );
 
   return (
     <footer className="flex w-full">
@@ -15,9 +18,9 @@ const FooterSection = () => {
         <SendLogoSvg />
         <div className="flex-grow">
           <textarea
-          placeholder="پیام"
-            className="w-full h-auto px-2 bg-transparent outline-none resize-none"
-            style={{ minHeight: "23px", maxHeight: "200px" }}
+            placeholder="پیام"
+            className="w-full h-[24px] px-2 bg-transparent outline-none resize-none"
+            style={{ minHeight: "24px", maxHeight: "200px" }}
             onChange={onInputHandler}
           ></textarea>
         </div>
