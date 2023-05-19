@@ -38,15 +38,18 @@ const MainSidebar = () => {
       } md:block md:col-span-1 col-span-4 h-full md:border-l md:border-zinc-700 overflow-y-auto pb-16 `}
     >
       <Tab.Group>
+        {/* Tabs */}
         <Tab.List className="w-full flex justify-evenly py-2">
           {tabs.map((t, index) => (
             <MainTab key={index} name={t.name} />
           ))}
         </Tab.List>
         <Tab.Panels>
+          {/* Conversation Panel */}
           <Tab.Panel>
             <ConversationsPanel />
           </Tab.Panel>
+          {/* Contacts Panel */}
           <Tab.Panel>
             <ul className="list-none flex flex-col">
               <button className="group border border-yellow-500 flex hover:bg-yellow-500 mx-auto rounded-xl p-2 w-fit text-yellow-500 hover:text-zinc-950 transition-all delay-100 hover:-translate-y-1">
