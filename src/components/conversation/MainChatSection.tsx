@@ -17,7 +17,7 @@ const MainChatSection = () => {
     goToBottom();
   }, [goToBottom]);
 
-  const onScrollHandler = () => {
+  const onScrollHandler = useCallback(() => {
     if (scrollRef.current) {
       if (
         +scrollRef.current.scrollTop.toFixed(0) <
@@ -28,7 +28,7 @@ const MainChatSection = () => {
         setIsScrollBottom(true);
       }
     }
-  };
+  }, []);
 
   return (
     <main
