@@ -1,16 +1,16 @@
 import MainSidebar from "@/components/sidebar/MainSidebar";
 import NavbarLayout from "@/layouts/NavbarLayout";
-import Modal from "@/components/ui/Modal";
+import Modal from "@/components/modal/Modal";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="w-full min-h-[600px] h-screen bg-zinc-800 flex flex-col text-white">
+    <main className="flex h-screen min-h-[600px] w-full flex-col bg-zinc-800 text-white">
       {/* Main Navbar */}
       <NavbarLayout />
 
       <Modal />
 
-      <div className="h-full grid grid-rows-1 grid-cols-1 md:grid-cols-4 pb-24 md:pb-10">
+      <div className="grid h-full grid-cols-1 grid-rows-1 pb-24 md:grid-cols-4 md:pb-10">
         {/* Sidebar */}
         <MainSidebar />
 
