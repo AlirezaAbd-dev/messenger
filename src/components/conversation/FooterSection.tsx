@@ -4,8 +4,8 @@ import React, { useCallback, useState } from "react";
 // @ts-ignore
 import persianRex from "persian-rex";
 
-import SendLogoSvg from "../ui/SendLogoSvg";
-import PaperClipSvg from "../ui/PaperClipSvg";
+import SendLogoSvg from "../ui/icons/SendLogoSvg";
+import PaperClipSvg from "../ui/icons/PaperClipSvg";
 
 const FooterSection = () => {
   const [message, setMessage] = useState<string>();

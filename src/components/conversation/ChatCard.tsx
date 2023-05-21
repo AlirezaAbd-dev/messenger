@@ -1,6 +1,6 @@
-import CheckedCircleLogoSvg from "../ui/CheckedCircleLogoSvg";
-import CheckedLogoSvg from "../ui/CheckedLogoSvg";
-import PendingClockLogoSvg from "../ui/PendingClockLogoSvg";
+import CheckedCircleLogoSvg from "../ui/icons/CheckedCircleLogoSvg";
+import CheckedLogoSvg from "../ui/icons/CheckedLogoSvg";
+import PendingClockLogoSvg from "../ui/icons/PendingClockLogoSvg";
 
 const ChatCard = (props: {
   isYou: boolean;

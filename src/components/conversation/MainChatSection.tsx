@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import GoToBottomSvg from "../ui/GoToBottomSvg";
+import GoToBottomSvg from "../ui/icons/GoToBottomSvg";
 import ChatCards from "./ChatCards";
 
 const MainChatSection = () => {

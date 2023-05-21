@@ -1,5 +1,5 @@
 import useSignInStore from "@/zustand/signInStore";
-import LockSvgSolid from "../ui/LockSvgSolid";
+import LockSvgSolid from "../ui/icons/LockSvgSolid";
 import { shallow } from "zustand/shallow";
 
 const OTPInput = () => {

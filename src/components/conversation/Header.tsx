@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import Avatar from "../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg";
-import OptionsIconSvg from "@/components/ui/OptionsIconSvg";
+import OptionsIconSvg from "@/components/ui/icons/OptionsIconSvg";
 
 const Header = () => {
   return (

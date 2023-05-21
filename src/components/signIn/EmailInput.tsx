@@ -5,7 +5,7 @@ import { ScaleLoader } from "react-spinners";
 import { toast } from "react-hot-toast";
 
 import useSignInStore from "@/zustand/signInStore";
-import UserSvgSolid from "../ui/UserSvgSolid";
+import UserSvgSolid from "../ui/icons/UserSvgSolid";
 import { sendEmailAction } from "@/actions/signInActions";
 
 const EmailInput = () => {
