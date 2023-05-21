@@ -1,6 +1,8 @@
 import MainSidebar from "@/components/sidebar/MainSidebar";
 import NavbarLayout from "@/layouts/NavbarLayout";
-import Modal from "@/components/modal/Modal";
+import dynamic from "next/dynamic";
+
+const Modal = dynamic(() => import("@/components/modal/Modal"));
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
