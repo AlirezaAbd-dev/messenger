@@ -5,12 +5,28 @@ export interface UserSchema {
   name: string;
   avatar?: string;
   status: "OFF" | "OFFLINE" | "ONLINE";
-  contacts?: mongoose.Types.ObjectId[];
+  contacts?: Contact[];
   conversations?: mongoose.Types.ObjectId[];
   messages?: mongoose.Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+interface Contact {
+  name: string;
+  email: string;
+}
+
+const contact = new mongoose.Schema<Contact>({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+});
 
 const userSchema = new mongoose.Schema<UserSchema>(
   {
@@ -33,10 +49,7 @@ const userSchema = new mongoose.Schema<UserSchema>(
       required: true,
       default: "OFFLINE",
     },
-    contacts: {
-      type: [mongoose.SchemaTypes.ObjectId],
-      ref: "User",
-    },
+    contacts: [contact],
     conversations: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: "Conversation",
