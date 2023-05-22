@@ -1,16 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
-interface ConversationSchema {
-  name: string;
-  avatar: string;
-  role: "PRIVATE" | "GROUP";
-  participants: mongoose.Types.ObjectId[];
-  messages: mongoose.Types.ObjectId[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-const conversationSchema = new mongoose.Schema<ConversationSchema>(
+const conversationSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -33,6 +23,9 @@ const conversationSchema = new mongoose.Schema<ConversationSchema>(
   },
   { timestamps: true }
 );
+
+type Conversation = InferSchemaType<typeof conversationSchema>;
+export interface ConversationSchema extends Document, Conversation {}
 
 const ConversationModel =
   mongoose.models.Conversation<ConversationSchema> ||

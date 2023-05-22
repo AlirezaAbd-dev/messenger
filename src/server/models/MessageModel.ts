@@ -1,16 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Document, InferSchemaType } from "mongoose";
 
-interface MessageSchema {
-  content: string;
-  seen: boolean;
-  senderId: mongoose.Types.ObjectId;
-  conversationId: mongoose.Types.ObjectId;
-  replyId: mongoose.Types.ObjectId;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-const messageSchema = new mongoose.Schema<MessageSchema>(
+const messageSchema = new mongoose.Schema(
   {
     content: {
       type: String,
@@ -37,6 +27,9 @@ const messageSchema = new mongoose.Schema<MessageSchema>(
   },
   { timestamps: true }
 );
+
+type Message = InferSchemaType<typeof messageSchema>;
+export interface MessageSchema extends Document, Message {}
 
 const MessageModel =
   mongoose.models.Message<MessageSchema> ||
