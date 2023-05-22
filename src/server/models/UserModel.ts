@@ -1,23 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType, Document } from "mongoose";
 
-export interface UserSchema {
-  email: string;
-  name: string;
-  avatar?: string;
-  status: "OFF" | "OFFLINE" | "ONLINE";
-  contacts?: Contact[];
-  conversations?: mongoose.Types.ObjectId[];
-  messages?: mongoose.Types.ObjectId[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-interface Contact {
-  name: string;
-  email: string;
-}
-
-const contact = new mongoose.Schema<Contact>({
+const contact = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -28,7 +11,7 @@ const contact = new mongoose.Schema<Contact>({
   },
 });
 
-const userSchema = new mongoose.Schema<UserSchema>(
+const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -61,6 +44,9 @@ const userSchema = new mongoose.Schema<UserSchema>(
   },
   { timestamps: true }
 );
+
+type User = InferSchemaType<typeof userSchema>;
+export interface UserSchema extends Document, User {}
 
 const UserModel =
   mongoose.models.User<UserSchema> ||
