@@ -17,7 +17,7 @@ const ChatCard = (props: {
   return (
     <li className={`flex ${props.isYou ? "justify-start" : "justify-end"}`}>
       <div
-        className={`m-4 flex h-auto min-w-fit flex-col items-start justify-start px-3 pb-2 ${
+        className={`m-4 flex h-auto min-w-fit flex-col items-start justify-start px-5 pb-2 pt-3 ${
           props.isYou ? "bg-yellow-500 text-zinc-950" : "bg-zinc-600 text-white"
         }  rounded-lg`}
       >
@@ -27,10 +27,17 @@ const ChatCard = (props: {
             overflowWrap: "break-word",
           }}
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi debitis
-          error quisquam aut molestiae pariatur et, perspiciatis natus optio
-          odio cum obcaecati sapiente harum tempora? Soluta sequi exercitationem
-          harum est.
+          لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
+          استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در
+          ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و
+          کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی
+          در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می
+          طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی
+          الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این
+          صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و
+          شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای
+          اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده
+          قرار گیرد.
         </p>
         <div
           className={`flex items-center ${
