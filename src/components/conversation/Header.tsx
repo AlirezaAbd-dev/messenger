@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <header className="flex h-14 w-full items-center justify-between py-2 shadow-xl">
       {/* Avatar And Name */}
-      <div className="flex">
+      <div className="flex flex-grow cursor-pointer hover:bg-zinc-900">
         <Image
           src={Avatar.src}
           alt="Avatar"
