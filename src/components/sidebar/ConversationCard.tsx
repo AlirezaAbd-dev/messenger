@@ -6,7 +6,7 @@ import Link from "next/link";
 const ConversationCard = () => {
   return (
     <Link href="/home/sa">
-      <li className="flex justify-start items-center border-b-2 border-zinc-700 px-4 py-2 cursor-pointer">
+      <li className="flex cursor-pointer items-center justify-start border-b-2 border-zinc-700 px-4 py-2 transition-colors delay-[40ms] hover:bg-zinc-900">
         {/* Avatar */}
         <Image
           src={Avatar.src}
@@ -14,9 +14,9 @@ const ConversationCard = () => {
           priority
           width={100}
           height={100}
-          className="rounded-full aspect-square w-14 h-14 ml-2 border border-green-500"
+          className="ml-2 aspect-square h-14 w-14 rounded-full border border-green-500"
         />
-        <div className="flex flex-col justify-between flex-grow overflow-x-hidden">
+        <div className="flex flex-grow flex-col justify-between overflow-x-hidden">
           <div className="flex justify-between">
             {/* Name */}
             <h3>علیرضا</h3>
