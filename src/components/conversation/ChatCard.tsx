@@ -1,6 +1,4 @@
-import CheckedCircleLogoSvg from "../ui/icons/CheckedCircleLogoSvg";
-import CheckedLogoSvg from "../ui/icons/CheckedLogoSvg";
-import PendingClockLogoSvg from "../ui/icons/PendingClockLogoSvg";
+import Icons from "../ui/Icons";
 
 const ChatCard = (props: {
   isYou: boolean;
@@ -9,20 +7,22 @@ const ChatCard = (props: {
 }) => {
   const messageState =
     (props.isYou && !props.pending && props.seen === true && (
-      <CheckedCircleLogoSvg />
+      <Icons.CheckedCircleLogoSvg />
     )) ||
-    (props.isYou && !props.pending && !props.seen && <CheckedLogoSvg />) ||
-    (props.isYou && props.pending && <PendingClockLogoSvg />);
+    (props.isYou && !props.pending && !props.seen && (
+      <Icons.CheckedLogoSvg />
+    )) ||
+    (props.isYou && props.pending && <Icons.PendingClockLogoSvg />);
 
   return (
     <li className={`flex ${props.isYou ? "justify-start" : "justify-end"}`}>
       <div
-        className={`flex flex-col justify-start items-start h-auto m-4 pb-2 px-3 min-w-fit ${
+        className={`m-4 flex h-auto min-w-fit flex-col items-start justify-start px-3 pb-2 ${
           props.isYou ? "bg-yellow-500 text-zinc-950" : "bg-zinc-600 text-white"
         }  rounded-lg`}
       >
         <p
-          className="whitespace-pre-line max-w-[250px] sm:max-w-[500px] md:max-w-xl lg:max-w-3xl xl:max-w-5xl overflow-hidden"
+          className="max-w-[250px] overflow-hidden whitespace-pre-line sm:max-w-[500px] md:max-w-xl lg:max-w-3xl xl:max-w-5xl"
           style={{
             overflowWrap: "break-word",
           }}
@@ -38,7 +38,7 @@ const ChatCard = (props: {
           } w-full`}
         >
           {messageState}
-          <span className="text-xs mt-2">23:45</span>
+          <span className="mt-2 text-xs">23:45</span>
         </div>
       </div>
     </li>

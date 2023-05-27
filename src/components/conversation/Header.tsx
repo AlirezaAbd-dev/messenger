@@ -1,11 +1,11 @@
 import Image from "next/image";
 
 import Avatar from "../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg";
-import OptionsIconSvg from "@/components/ui/icons/OptionsIconSvg";
+import Icons from "../ui/Icons";
 
 const Header = () => {
   return (
-    <header className="flex justify-between items-center w-full h-14 shadow-xl py-2">
+    <header className="flex h-14 w-full items-center justify-between py-2 shadow-xl">
       {/* Avatar And Name */}
       <div className="flex">
         <Image
@@ -13,7 +13,7 @@ const Header = () => {
           alt="Avatar"
           width={100}
           height={100}
-          className="rounded-full w-11 h-11 mx-2"
+          className="mx-2 h-11 w-11 rounded-full"
         />
         <div>
           <h3>علیرضا</h3>
@@ -21,8 +21,8 @@ const Header = () => {
         </div>
       </div>
       {/* Options */}
-      <div className="flex mx-2">
-        <OptionsIconSvg />
+      <div className="mx-2 flex">
+        <Icons.OptionsIconSvg />
       </div>
     </header>
   );

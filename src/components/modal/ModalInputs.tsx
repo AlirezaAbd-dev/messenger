@@ -1,7 +1,6 @@
 import { Field, ErrorMessage } from "formik";
 
-import UserSvgSolid from "../ui/icons/UserSvgSolid";
-import MailIconSvg from "../ui/icons/MailIconSvg";
+import Icons from "../ui/Icons";
 
 const ModalInputs = () => {
   return (
@@ -9,7 +8,7 @@ const ModalInputs = () => {
       <div className="flex h-10 w-[80%] overflow-hidden rounded-xl bg-yellow-500 text-xs md:text-base">
         <div className="flex aspect-square h-full items-center justify-center bg-yellow-600">
           {/* User SVG solid */}
-          <UserSvgSolid />
+          <Icons.UserSvgSolid />
         </div>
         <Field
           name="name"
@@ -25,7 +24,7 @@ const ModalInputs = () => {
       <div className="flex h-10 w-[80%] overflow-hidden rounded-xl bg-yellow-500 text-xs md:text-base">
         <div className="flex aspect-square h-full items-center justify-center bg-yellow-600">
           {/* User SVG solid */}
-          <MailIconSvg />
+          <Icons.MailIconSvg />
         </div>
         <Field
           name="email"

@@ -1,8 +1,8 @@
 import MainContainer from "@/components/signIn/MainContainer";
-import UserSvg from "@/components/ui/icons/UserSvg";
 import Card from "@/components/signIn/Card";
 import SubmitButton from "@/components/signIn/SubmitButton";
 import Inputs from "@/components/signIn/Inputs";
+import Icons from "@/components/ui/Icons";
 
 const SignIn = () => {
   return (
@@ -10,7 +10,7 @@ const SignIn = () => {
       {/* Card */}
       <Card>
         {/* User SVG */}
-        <UserSvg />
+        <Icons.UserSvg />
         <Inputs />
       </Card>
 

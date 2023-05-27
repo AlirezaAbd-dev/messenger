@@ -1,32 +1,32 @@
 "use client";
 import Image from "next/image";
 
-import AddContactSvg from "../ui/icons/AddContactSvg";
 import Avatar from "../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg";
 import useOptionStore from "@/zustand/optionsStore";
+import Icons from "../ui/Icons";
 
 const ContactsPanel = () => {
   const setIsModalOpen = useOptionStore((state) => state.setIsModalOpen);
 
   return (
-    <ul className="list-none flex flex-col">
+    <ul className="flex list-none flex-col">
       <button
         onClick={() => setIsModalOpen(true)}
-        className="group border border-yellow-500 flex hover:bg-yellow-500 mx-auto rounded-xl p-2 w-fit text-yellow-500 hover:text-zinc-950 transition-all delay-100 hover:-translate-y-1"
+        className="group mx-auto flex w-fit rounded-xl border border-yellow-500 p-2 text-yellow-500 transition-all delay-100 hover:-translate-y-1 hover:bg-yellow-500 hover:text-zinc-950"
       >
-        <AddContactSvg />
+        <Icons.AddContactSvg />
         اضافه کردن مخاطب
       </button>
-      <li className="flex justify-start items-center border-b-2 border-zinc-700 px-4 py-2 cursor-pointer">
+      <li className="flex cursor-pointer items-center justify-start border-b-2 border-zinc-700 px-4 py-2">
         <Image
           src={Avatar.src}
           alt="Avatar"
           priority
           width={100}
           height={100}
-          className="rounded-full aspect-square w-14 h-14 ml-2 border border-green-500"
+          className="ml-2 aspect-square h-14 w-14 rounded-full border border-green-500"
         />
-        <div className="flex flex-col justify-between flex-grow">
+        <div className="flex flex-grow flex-col justify-between">
           <div className="flex justify-between">
             <h3>علیرضا</h3>
           </div>

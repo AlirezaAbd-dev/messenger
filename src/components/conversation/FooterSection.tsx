@@ -4,8 +4,7 @@ import React, { useCallback, useState } from "react";
 // @ts-ignore
 import persianRex from "persian-rex";
 
-import SendLogoSvg from "../ui/icons/SendLogoSvg";
-import PaperClipSvg from "../ui/icons/PaperClipSvg";
+import Icons from "../ui/Icons";
 
 const FooterSection = () => {
   const [message, setMessage] = useState<string>();
@@ -20,13 +19,13 @@ const FooterSection = () => {
 
   return (
     <footer className="flex w-full">
-      <section className="flex items-center w-full m-4 mt-0 p-4 h-auto bg-zinc-700 rounded-3xl">
-        <SendLogoSvg />
+      <section className="m-4 mt-0 flex h-auto w-full items-center rounded-3xl bg-zinc-700 p-4">
+        <Icons.SendLogoSvg />
         <div className="flex-grow" style={{ direction: "rtl" }}>
           <textarea
             value={message}
             placeholder="پیام"
-            className="w-full h-[24px] px-2 bg-transparent outline-none resize-none"
+            className="h-[24px] w-full resize-none bg-transparent px-2 outline-none"
             style={{
               minHeight: "24px",
               maxHeight: "200px",
@@ -39,7 +38,7 @@ const FooterSection = () => {
             onChange={onInputHandler}
           ></textarea>
         </div>
-        <PaperClipSvg />
+        <Icons.PaperClipSvg />
       </section>
     </footer>
   );

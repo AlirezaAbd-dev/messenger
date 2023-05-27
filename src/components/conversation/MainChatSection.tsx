@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import GoToBottomSvg from "../ui/icons/GoToBottomSvg";
 import ChatCards from "./ChatCards";
+import Icons from "../ui/Icons";
 
 const MainChatSection = () => {
   const [isScrollBottom, setIsScrollBottom] = useState(true);
@@ -40,9 +40,9 @@ const MainChatSection = () => {
       {!isScrollBottom && (
         <div
           onClick={goToBottom}
-          className="sticky bottom-5 right-5 bg-zinc-700 rounded-full w-10 h-10 flex justify-center items-center cursor-pointer hover:text-yellow-500"
+          className="sticky bottom-5 right-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-zinc-700 hover:text-yellow-500"
         >
-          <GoToBottomSvg />
+          <Icons.GoToBottomSvg />
         </div>
       )}
     </main>
