@@ -17,7 +17,7 @@ const ChatCard = (props: {
   return (
     <li className={`flex ${props.isYou ? "justify-start" : "justify-end"}`}>
       <div
-        className={`m-4 flex h-auto min-w-fit flex-col items-start justify-start px-5 pb-2 pt-3 ${
+        className={`m-4 flex h-auto min-w-fit flex-col items-start justify-start px-5 pb-3 pt-3 ${
           props.isYou ? "bg-yellow-500 text-zinc-950" : "bg-zinc-600 text-white"
         }  rounded-lg`}
       >
