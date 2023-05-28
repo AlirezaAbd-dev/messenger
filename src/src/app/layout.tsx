@@ -17,11 +17,12 @@ const myFont = localFont({
 });
 
 export default async function RootLayout(props: any) {
+
   return (
     <html lang="fa">
       <body
         dir="rtl"
-        className={`${myFont.variable} bg-zinc-800 overflow-hidden`}
+        className={`${myFont.variable} overflow-hidden bg-zinc-800`}
       >
         <Toaster
           position="top-center"

@@ -6,6 +6,7 @@ import { Tab } from "@headlessui/react";
 import MainTab from "./MainTab";
 import ConversationsPanel from "./ConversationsPanel";
 import ContactsPanel from "./ContactsPanel";
+import socket from "@/socket";
 
 const tabs = [
   {
@@ -20,6 +21,10 @@ const MainSidebar = () => {
   const [isInSlug, setIsInSlug] = useState<boolean>(false);
   const pathname = usePathname();
 
+  socket.on("alert", (text) => {
+    console.log(text);
+  });
+
   useEffect(() => {
     if (pathname.split("/")[2]) {
       setIsInSlug(true);
@@ -32,11 +37,11 @@ const MainSidebar = () => {
     <section
       className={`${
         isInSlug && "hidden"
-      } md:block md:col-span-1 col-span-4 h-full md:border-l md:border-zinc-700 overflow-y-auto pb-16 `}
+      } col-span-4 h-full overflow-y-auto pb-16 md:col-span-1 md:block md:border-l md:border-zinc-700 `}
     >
       <Tab.Group defaultIndex={1}>
         {/* Tabs */}
-        <Tab.List className="w-full flex justify-evenly py-2">
+        <Tab.List className="flex w-full justify-evenly py-2">
           {tabs.map((t, index) => (
             <MainTab key={index} name={t.name} />
           ))}
