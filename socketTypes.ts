@@ -1,5 +1,4 @@
 export interface ServerToClientEvents {
-  alert: (text: string) => void;
 }
 
 export interface ClientToServerEvents {}

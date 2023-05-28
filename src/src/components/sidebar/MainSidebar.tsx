@@ -21,10 +21,6 @@ const MainSidebar = () => {
   const [isInSlug, setIsInSlug] = useState<boolean>(false);
   const pathname = usePathname();
 
-  socket.on("alert", (text) => {
-    console.log(text);
-  });
-
   useEffect(() => {
     if (pathname.split("/")[2]) {
       setIsInSlug(true);

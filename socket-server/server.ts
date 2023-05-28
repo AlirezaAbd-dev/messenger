@@ -24,11 +24,6 @@ server.listen(3001, () => {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.handshake.headers["x-auth-token"]);
-  console.log("you are connected!");
-
-  socket.emit("alert", "yoyo");
-
   socket.on("disconnect", () => {
     console.log("you are desconnected!");
   });
