@@ -78,6 +78,17 @@ export default async function addContact(req: NextRequest) {
     );
   }
 
+  const userExistToAdd = await UserModel.findOne<UserSchema>({
+    email: validatedBody.data.email,
+  });
+
+  if (!userExistToAdd) {
+    return res.json(
+      { message: "چنین کاربری وجود خارجی ندارد!" },
+      { status: 404, headers: newHeaders }
+    );
+  }
+
   //   Push the new contact if already not exist
   findUser.contacts?.push({
     email: validatedBody.data.email,
