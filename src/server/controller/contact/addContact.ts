@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse as res } from "next/server";
 
-import getHeaders from "../utils/getHeaders";
-import createContactValidation from "../validation/createContactValidation";
-import verifyTokens from "../utils/verifyTokens";
-import dbConnect from "../config/dbConnect";
-import UserModel, { UserSchema } from "../models/UserModel";
+import getHeaders from "../../utils/getHeaders";
+import createContactValidation from "../../validation/createContactValidation";
+import verifyTokens from "../../utils/verifyTokens";
+import dbConnect from "../../config/dbConnect";
+import UserModel, { UserSchema } from "../../models/UserModel";
 
 export default async function addContact(req: NextRequest) {
   // Getting headers
