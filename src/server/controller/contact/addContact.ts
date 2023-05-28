@@ -93,6 +93,7 @@ export default async function addContact(req: NextRequest) {
   findUser.contacts?.push({
     email: validatedBody.data.email,
     name: validatedBody.data.name,
+    avatar: userExistToAdd.avatar,
   });
 
   //   Save the data
