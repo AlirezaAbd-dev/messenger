@@ -11,38 +11,39 @@ const verifyTokens = async (headers: Headers) => {
   const unverifiedRefreshToken = headers
     .get("x-refresh-token")!
     .startsWith("Bearer")
-    ? headers.get("x-auth-token")!.split(" ")[1]
+    ? headers.get("x-refresh-token")!.split(" ")[1]
     : "";
 
-  let verifyToken = jwt.verify(unverifiedToken, process.env.JWT_VERIFY_SECRET);
-
   let refreshToken;
+  let verifyToken;
 
-  if (!verifyToken) {
-    refreshToken = jwt.verify(
-      unverifiedRefreshToken,
-      process.env.JWT_REFRESH_SECRET
-    );
-
-    if (!refreshToken) {
+  try {
+    verifyToken = jwt.verify(unverifiedToken, process.env.JWT_VERIFY_SECRET);
+  } catch (_err) {
+    try {
+      refreshToken = jwt.decode(unverifiedRefreshToken);
+    } catch (err) {
       return { error: "شما اجازه دسترسی ندارید!" };
     }
 
     let redisMembers;
     try {
-      redisMembers = await redisClient.sMembers(process.env.REDIS_TOKEN_KEY);
+      console.time("redis");
+
+      await redisClient.connect();
+      redisMembers = await redisClient.sIsMember(
+        process.env.REDIS_TOKEN_KEY,
+        unverifiedRefreshToken
+      );
+      await redisClient.disconnect();
+
+      console.timeEnd("redis");
     } catch (err) {
       console.log(err);
     }
 
-    if (redisMembers) {
-      const tokenExists = redisMembers.find(
-        (member) => member === unverifiedRefreshToken
-      );
-
-      if (!tokenExists) {
-        return { error: "شما اجازه دسترسی ندارید!" };
-      }
+    if (!redisMembers) {
+      return { error: "شما اجازه دسترسی ندارید!" };
     }
 
     newToken = jwt.sign(
