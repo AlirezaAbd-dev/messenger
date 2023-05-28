@@ -4,34 +4,45 @@ import redisClient from "../config/redisClient";
 
 const verifyTokens = async (headers: Headers) => {
   let newToken = "";
+  const unverifiedToken = headers.get("x-auth-token")!.startsWith("Bearer")
+    ? headers.get("x-auth-token")!.split(" ")[1]
+    : "";
 
-  let verifyToken = jwt.verify(
-    headers.get("x-auth-token")!,
-    process.env.JWT_VERIFY_SECRET
-  );
+  const unverifiedRefreshToken = headers
+    .get("x-refresh-token")!
+    .startsWith("Bearer")
+    ? headers.get("x-auth-token")!.split(" ")[1]
+    : "";
+
+  let verifyToken = jwt.verify(unverifiedToken, process.env.JWT_VERIFY_SECRET);
 
   let refreshToken;
 
   if (!verifyToken) {
     refreshToken = jwt.verify(
-      headers.get("x-refresh-token")!,
+      unverifiedRefreshToken,
       process.env.JWT_REFRESH_SECRET
     );
 
     if (!refreshToken) {
-      throw new Error("شما اجازه دسترسی ندارید!");
+      return { error: "شما اجازه دسترسی ندارید!" };
     }
 
-    const redisMembers = await redisClient.sMembers(
-      process.env.REDIS_TOKEN_KEY
-    );
+    let redisMembers;
+    try {
+      redisMembers = await redisClient.sMembers(process.env.REDIS_TOKEN_KEY);
+    } catch (err) {
+      console.log(err);
+    }
 
-    const tokenExists = redisMembers.find(
-      (member) => member === headers.get("x-refresh-token")
-    );
+    if (redisMembers) {
+      const tokenExists = redisMembers.find(
+        (member) => member === unverifiedRefreshToken
+      );
 
-    if (!tokenExists) {
-      throw new Error("شما اجازه دسترسی ندارید!");
+      if (!tokenExists) {
+        return { error: "شما اجازه دسترسی ندارید!" };
+      }
     }
 
     newToken = jwt.sign(
@@ -42,10 +53,11 @@ const verifyTokens = async (headers: Headers) => {
       }
     );
   }
+
   return {
     email: verifyToken
-      ? (verifyToken as jwt.JwtPayload & { email: string }).email
-      : (refreshToken as jwt.JwtPayload & { email: string }).email,
+      ? (verifyToken as unknown as jwt.JwtPayload & { email: string }).email
+      : (refreshToken as unknown as jwt.JwtPayload & { email: string }).email,
     newToken,
   };
 };
