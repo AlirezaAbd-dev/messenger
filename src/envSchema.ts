@@ -9,4 +9,5 @@ export default z.object({
   REDIS_URI: z.string(),
   REDIS_TOKEN_KEY: z.string(),
   MONGO_URI: z.string(),
+  API_URL: z.string(),
 });

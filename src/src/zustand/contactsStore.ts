@@ -1,21 +1,44 @@
+import getContactsAction from "@/actions/getContactsAction";
 import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
-interface Contact {
+export interface Contact {
   name: string;
   email: string;
   avatar: string;
 }
 
-interface Contacts {
+export interface Contacts {
   contacts: Contact[];
   setContacts: (contacts: Contact[]) => void;
+  error: string;
+  loading: boolean;
 }
 
-const useContactsStore = create<Contacts>()((set, get) => ({
-  contacts: [],
-  setContacts(contacts) {
-    return set({ contacts: contacts });
-  },
-}));
+const useContactsStore = create<Contacts>()(
+  devtools(
+    persist(
+      (set, get) => ({
+        loading: false,
+        error: "",
+        contacts: [],
+        async setContacts() {
+          try {
+            set({ loading: true });
+            const contacts = await getContactsAction(
+              localStorage.getItem("verify-token")!,
+              localStorage.getItem("refresh-token")!
+            );
+
+            return set({ contacts, error: "", loading: false });
+          } catch (err: any) {
+            return set({ error: err.response.data.message, loading: false });
+          }
+        },
+      }),
+      { name: "contacts" }
+    )
+  )
+);
 
 export default useContactsStore;

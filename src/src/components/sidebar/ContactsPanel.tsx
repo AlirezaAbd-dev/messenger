@@ -4,9 +4,22 @@ import Image from "next/image";
 import Avatar from "../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg";
 import useOptionStore from "@/zustand/optionsStore";
 import Icons from "../ui/Icons";
+import useContactsStore from "@/zustand/contactsStore";
+import { shallow } from "zustand/shallow";
 
 const ContactsPanel = () => {
   const setIsModalOpen = useOptionStore((state) => state.setIsModalOpen);
+  const [contacts, error] = useContactsStore(
+    (state) => [state.contacts, state.error],
+    shallow
+  );
+
+  if (contacts) {
+    console.log(contacts);
+  }
+  if (error) {
+    console.log(error);
+  }
 
   return (
     <ul className="flex list-none flex-col">
