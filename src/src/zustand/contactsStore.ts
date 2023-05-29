@@ -5,12 +5,13 @@ import { devtools, persist } from "zustand/middleware";
 export interface Contact {
   name: string;
   email: string;
-  avatar: string;
+  avatar?: string;
+  _id: string;
 }
 
 export interface Contacts {
   contacts: Contact[];
-  setContacts: (contacts: Contact[]) => void;
+  fetchContacts: () => void;
   error: string;
   loading: boolean;
 }
@@ -22,7 +23,7 @@ const useContactsStore = create<Contacts>()(
         loading: false,
         error: "",
         contacts: [],
-        async setContacts() {
+        async fetchContacts() {
           try {
             set({ loading: true });
             const contacts = await getContactsAction(

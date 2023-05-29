@@ -6,7 +6,7 @@ import { Tab } from "@headlessui/react";
 import MainTab from "./MainTab";
 import ConversationsPanel from "./ConversationsPanel";
 import ContactsPanel from "./ContactsPanel";
-import socket from "@/socket";
+import useContactsStore from "@/zustand/contactsStore";
 
 const tabs = [
   {
@@ -18,8 +18,14 @@ const tabs = [
 ];
 
 const MainSidebar = () => {
+  const fetchContacts = useContactsStore((state) => state.fetchContacts);
+
   const [isInSlug, setIsInSlug] = useState<boolean>(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    fetchContacts();
+  }, [fetchContacts]);
 
   useEffect(() => {
     if (pathname.split("/")[2]) {

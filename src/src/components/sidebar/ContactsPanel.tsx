@@ -1,25 +1,18 @@
 "use client";
-import Image from "next/image";
 
-import Avatar from "../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg";
 import useOptionStore from "@/zustand/optionsStore";
 import Icons from "../ui/Icons";
 import useContactsStore from "@/zustand/contactsStore";
 import { shallow } from "zustand/shallow";
+import { useEffect } from "react";
+import ContactCard from "./ContactCard";
 
 const ContactsPanel = () => {
   const setIsModalOpen = useOptionStore((state) => state.setIsModalOpen);
-  const [contacts, error] = useContactsStore(
-    (state) => [state.contacts, state.error],
+  const [contacts, error, loading] = useContactsStore(
+    (state) => [state.contacts, state.error, state.loading],
     shallow
   );
-
-  if (contacts) {
-    console.log(contacts);
-  }
-  if (error) {
-    console.log(error);
-  }
 
   return (
     <ul className="flex list-none flex-col">
@@ -30,22 +23,9 @@ const ContactsPanel = () => {
         <Icons.AddContactSvg />
         اضافه کردن مخاطب
       </button>
-      <li className="flex cursor-pointer items-center justify-start border-b-2 border-zinc-700 px-4 py-2 transition-colors delay-[40ms] hover:bg-zinc-900">
-        <Image
-          src={Avatar.src}
-          alt="Avatar"
-          priority
-          width={100}
-          height={100}
-          className="ml-2 aspect-square h-14 w-14 rounded-full border border-green-500"
-        />
-        <div className="flex flex-grow flex-col justify-between">
-          <div className="flex justify-between">
-            <h3>علیرضا</h3>
-          </div>
-          <p className="text-xs">alireza.abedi9310@gmail.com</p>
-        </div>
-      </li>
+      {!loading &&
+        contacts &&
+        contacts.map((c) => <ContactCard contact={c} key={c._id} />)}
     </ul>
   );
 };

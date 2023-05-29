@@ -13,7 +13,7 @@ const getContactsAction = async (token: string, refreshToken: string) => {
       },
     }
   );
-  return result.data;
+  return result.data.sort((a, b) => a.name.localeCompare(b.name));
 };
 
 export default getContactsAction;
