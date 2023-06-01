@@ -9,27 +9,50 @@ import ModalTitle from "./ModalTitle";
 import ModalDialogLayout from "./ModalDialogLayout";
 import ModalInputs from "./ModalInputs";
 import ModalButtons from "./ModalButtons";
+import getTokens from "@/utils/getTokens";
+import createContactAction from "@/actions/createContactAction";
+import useContactsStore from "@/zustand/contactsStore";
 
 export default function Modal() {
+  const fetchContacts = useContactsStore((state) => state.fetchContacts);
+
   return (
     <ModalMainLayout>
       <Formik
         initialValues={{ email: "", name: "" }}
         validationSchema={toFormikValidationSchema(addContactValidation)}
         onSubmit={(values) => {
-          console.log(values);
+          const { refreshToken, verifyToken } = getTokens();
+          const action = async () => {
+            try {
+              const res = await createContactAction(values.name, values.email, {
+                refreshToken,
+                verifyToken,
+              });
+
+              console.log(res);
+
+              fetchContacts();
+              return;
+            } catch (err: any) {
+              alert(err.message);
+            }
+          };
+          action();
         }}
       >
-        <Form>
-          <ModalDialogLayout>
-            {/* Title */}
-            <ModalTitle />
-            {/* Modal itself */}
-            <ModalInputs />
+        {({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <ModalDialogLayout>
+              {/* Title */}
+              <ModalTitle />
+              {/* Modal itself */}
+              <ModalInputs />
 
-            <ModalButtons />
-          </ModalDialogLayout>
-        </Form>
+              <ModalButtons />
+            </ModalDialogLayout>
+          </form>
+        )}
       </Formik>
     </ModalMainLayout>
   );

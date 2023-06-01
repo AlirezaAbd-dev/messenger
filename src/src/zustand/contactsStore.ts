@@ -33,7 +33,11 @@ const useContactsStore = create<Contacts>()(
 
             return set({ contacts, error: "", loading: false });
           } catch (err: any) {
-            return set({ error: err.response.data.message, loading: false });
+            if (err)
+              return set({
+                error: err?.response?.data?.message,
+                loading: false,
+              });
           }
         },
       }),

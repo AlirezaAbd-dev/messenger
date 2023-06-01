@@ -74,7 +74,7 @@ export default async function addContact(req: NextRequest) {
   if (contactExists) {
     return res.json(
       { message: "این مخاطب در حال حاضر موجود است!" },
-      { headers: newHeaders }
+      { headers: newHeaders, status: 400 }
     );
   }
 
