@@ -4,7 +4,6 @@ import useOptionStore from "@/zustand/optionsStore";
 import Icons from "../ui/Icons";
 import useContactsStore from "@/zustand/contactsStore";
 import { shallow } from "zustand/shallow";
-import { useEffect } from "react";
 import ContactCard from "./ContactCard";
 
 const ContactsPanel = () => {

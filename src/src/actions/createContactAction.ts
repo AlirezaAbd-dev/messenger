@@ -20,7 +20,7 @@ export default async function createContactAction(
         },
       }
     )
-    .then((res) => res.data)
+    .then((res) => [res.data, res.headers["x-auth-token"]])
     .catch((err) => {
       throw new Error(err.response.data.message);
     });

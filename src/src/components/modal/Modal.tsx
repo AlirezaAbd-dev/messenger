@@ -25,12 +25,16 @@ export default function Modal() {
           const { refreshToken, verifyToken } = getTokens();
           const action = async () => {
             try {
-              const res = await createContactAction(values.name, values.email, {
-                refreshToken,
-                verifyToken,
-              });
+              const [data, token] = await createContactAction(
+                values.name,
+                values.email,
+                {
+                  refreshToken,
+                  verifyToken,
+                }
+              );
 
-              console.log(res);
+              if (token) localStorage.setItem("verify-token", token);
 
               fetchContacts();
               return;
