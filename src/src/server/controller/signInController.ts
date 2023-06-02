@@ -4,7 +4,9 @@ import cache from "@/server/config/nodeCache";
 import { signInValidator } from "@/server/validation/signInValidation";
 import createToken from "../utils/createToken";
 import dbConnect from "../config/dbConnect";
-import UserModel, { UserSchema } from "../models/UserModel";
+import UserModel, {
+  UserSchema,
+} from "../../../../socket-server/models/UserModel";
 
 export const PUT = async (req: NextRequest) => {
   let email: string;

@@ -1,5 +1,7 @@
 import dbConnect from "@/server/config/dbConnect";
-import UserModel, { UserSchema } from "@/server/models/UserModel";
+import UserModel, {
+  UserSchema,
+} from "../../../../../socket-server/models/UserModel";
 import getHeaders from "@/server/utils/getHeaders";
 import verifyTokens from "@/server/utils/verifyTokens";
 import editContactValidation from "@/server/validation/editContactValidation";

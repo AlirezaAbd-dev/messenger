@@ -2,6 +2,11 @@ import { createServer } from "http";
 
 import express from "express";
 import { Server } from "socket.io";
+import { config } from "dotenv";
+
+config({ path: "./config/.env" });
+import "./env";
+
 import {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -18,6 +23,8 @@ const io = new Server<
 >(server, {
   cors: { origin: "http://localhost:3000" },
 });
+
+import "./config/dbConnect";
 
 server.listen(3001, () => {
   console.log("server socket is running on port 3001.");
