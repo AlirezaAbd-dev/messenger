@@ -30,13 +30,15 @@ server.listen(3001, () => {
   console.log("server socket is running on port 3001.");
 });
 
-io.use((socket) => {
+io.use((socket, next) => {
   const verifyToken = socket.handshake.headers["x-auth-token"];
   const refreshToken = socket.handshake.headers["x-refresh-token"];
 
   if (!verifyToken || !refreshToken) {
-    throw new Error("شما دسترسی برای این کار را ندارید!");
+    next(new Error("شما دسترسی برای این کار را ندارید!"));
   }
+
+  next();
 });
 
 io.on("connection", (socket) => {
