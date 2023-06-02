@@ -1,6 +1,7 @@
 "use client";
 
-import { Formik, Form } from "formik";
+import { useCallback } from "react";
+import { Formik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import addContactValidation from "@/validation/addContactValidation";
@@ -16,33 +17,33 @@ import useContactsStore from "@/zustand/contactsStore";
 export default function Modal() {
   const fetchContacts = useContactsStore((state) => state.fetchContacts);
 
+  const serverAction = useCallback(
+    async (name: string, email: string) => {
+      const { refreshToken, verifyToken } = getTokens();
+      try {
+        const [_data, token] = await createContactAction(name, email, {
+          refreshToken,
+          verifyToken,
+        });
+
+        if (token) localStorage.setItem("verify-token", token);
+
+        fetchContacts();
+        return;
+      } catch (err: any) {
+        alert(err.message);
+      }
+    },
+    [fetchContacts]
+  );
+
   return (
     <ModalMainLayout>
       <Formik
         initialValues={{ email: "", name: "" }}
         validationSchema={toFormikValidationSchema(addContactValidation)}
         onSubmit={(values) => {
-          const { refreshToken, verifyToken } = getTokens();
-          const action = async () => {
-            try {
-              const [data, token] = await createContactAction(
-                values.name,
-                values.email,
-                {
-                  refreshToken,
-                  verifyToken,
-                }
-              );
-
-              if (token) localStorage.setItem("verify-token", token);
-
-              fetchContacts();
-              return;
-            } catch (err: any) {
-              alert(err.message);
-            }
-          };
-          action();
+          serverAction(values.name, values.email);
         }}
       >
         {({ handleSubmit }) => (
