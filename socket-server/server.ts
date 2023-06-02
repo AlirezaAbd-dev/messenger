@@ -12,6 +12,7 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "../socketTypes";
+import UserModel from "./models/UserModel";
 
 const app = express();
 const server = createServer(app);
@@ -36,16 +37,23 @@ io.use((socket, next) => {
 
   if (!verifyToken || !refreshToken) {
     next(new Error("شما دسترسی برای این کار را ندارید!"));
+    return;
   }
 
   next();
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   const selfId = socket.id;
+
+  UserModel.findOne({ email: "" });
+
+  // Error handling
   socket.on("error", (err) => {
     socket.to(selfId).emit("auth-error", err.message);
   });
+
+  // When user disconnected
   socket.on("disconnect", () => {
     console.log("you are desconnected!");
   });
