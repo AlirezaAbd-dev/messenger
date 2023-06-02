@@ -54,7 +54,11 @@ export default async function deleteContact(
     return res.json({ message: "کاربر مورد نظر یافت نشد!" }, { status: 404 });
   }
 
-  findUser.contacts.filter((c) => c._id?.toString() !== contactId.toString());
+  findUser.contacts.remove(
+    (c: any) => c._id?.toString() !== contactId.toString()
+  );
+
+  findUser.save();
 
   res.json({ message: "مخاطب با موفقیت حذف شد!" }, { headers: newHeaders });
 }
