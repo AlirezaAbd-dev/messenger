@@ -59,10 +59,13 @@ export default async function editContact(
   try {
     await dbConnect();
   } catch (err) {
-    return res.json({
-      message: "مشکلی در اتصال به پایگاه داده پیش آمد!",
-      error: err,
-    });
+    return res.json(
+      {
+        message: "مشکلی در اتصال به پایگاه داده پیش آمد!",
+        error: err,
+      },
+      { status: 500 }
+    );
   }
 
   //   Check the existing of user in database

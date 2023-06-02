@@ -1,6 +1,8 @@
+import { ScaleLoader } from "react-spinners";
+
 import useOptionStore from "@/zustand/optionsStore";
 
-const ModalButtons = () => {
+const ModalButtons = (props: { loading: boolean }) => {
   let setIsOpen = useOptionStore((state) => state.setIsModalOpen);
 
   function closeModal() {
@@ -17,9 +19,18 @@ const ModalButtons = () => {
       </button>
       <button
         type="submit"
-        className="inline-flex justify-center rounded-xl border border-transparent bg-yellow-500 px-4 py-2 text-sm font-medium text-zinc-950 transition-all delay-100 hover:-translate-y-1"
+        disabled={props.loading}
+        className={`inline-flex justify-center rounded-xl border border-transparent ${
+          props.loading
+            ? "border border-yellow-500 bg-zinc-900"
+            : "bg-yellow-500"
+        } px-4 py-2 text-sm font-medium text-zinc-950 transition-all delay-100 hover:-translate-y-1`}
       >
-        ساختن
+        {props.loading ? (
+          <ScaleLoader color="rgb(234 179 8 / 1)" width={4} height={10} />
+        ) : (
+          "ساختن"
+        )}
       </button>
     </div>
   );

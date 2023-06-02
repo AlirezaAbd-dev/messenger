@@ -5,6 +5,7 @@ import Icons from "../ui/Icons";
 import useContactsStore from "@/zustand/contactsStore";
 import { shallow } from "zustand/shallow";
 import ContactCard from "./ContactCard";
+import { ScaleLoader } from "react-spinners";
 
 const ContactsPanel = () => {
   const setIsModalOpen = useOptionStore((state) => state.setIsModalOpen);
@@ -22,7 +23,19 @@ const ContactsPanel = () => {
         <Icons.AddContactSvg />
         اضافه کردن مخاطب
       </button>
-      {!loading &&
+
+      {error && <p className="mx-auto">{error}</p>}
+
+      {loading && (
+        <ScaleLoader
+          color="rgb(234 179 8 / 1)"
+          width={10}
+          height={40}
+          className="mx-auto mt-10"
+        />
+      )}
+      {!error &&
+        !loading &&
         contacts &&
         contacts.map((c) => <ContactCard contact={c} key={c._id} />)}
     </ul>
