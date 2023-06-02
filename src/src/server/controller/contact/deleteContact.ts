@@ -33,10 +33,7 @@ export default async function deleteContact(
     );
   }
 
-  const { email, newToken } = tokenData;
-
-  const newHeaders = new Headers({ "x-auth-token": "" });
-  newHeaders.set("x-auth-token", newToken ? newToken : "");
+  const { email, newHeaders } = tokenData;
 
   try {
     await dbConnect();

@@ -2,15 +2,45 @@ import dbConnect from "@/server/config/dbConnect";
 import UserModel, { UserSchema } from "@/server/models/UserModel";
 import getHeaders from "@/server/utils/getHeaders";
 import verifyTokens from "@/server/utils/verifyTokens";
+import editContactValidation from "@/server/validation/editContactValidation";
 import { NextRequest, NextResponse as res } from "next/server";
 
-export default async function getAllContacts(req: NextRequest) {
+export default async function editContact(
+  req: NextRequest,
+  params: {
+    slug: {
+      contactId: string;
+    };
+  }
+) {
+  const contactId = params.slug.contactId;
+
   // Getting headers
   let headers: Headers;
   try {
     headers = getHeaders(req.headers);
   } catch (err: any) {
     return res.json({ message: err.message }, { status: 401 });
+  }
+
+  //   Get body
+  let body;
+  try {
+    body = await req.json().then((resolve) => resolve);
+  } catch (err) {
+    return res.json(
+      { message: "لطفا ایمیل و نام را به درستی وارد نمایید!" },
+      { status: 400 }
+    );
+  }
+
+  //   Validating the body
+  const validatedBody = editContactValidation.safeParse(body);
+  if (!validatedBody.success) {
+    return res.json({
+      message: validatedBody.error.errors[0].message,
+      error: validatedBody.error,
+    });
   }
 
   //   Verifying tokens
@@ -42,7 +72,13 @@ export default async function getAllContacts(req: NextRequest) {
     return res.json({ message: "کاربر مورد نظر یافت نشد!" }, { status: 404 });
   }
 
-  const contacts = findUser.contacts;
+  const contactIndex = findUser.contacts.findIndex(
+    (c) => c._id?.toString() === contactId.toString()
+  );
 
-  return res.json(contacts, { headers: newHeaders });
+  findUser.contacts[contactIndex].name = validatedBody.data.name;
+
+  await findUser.save();
+
+  res.json("مخاطب با موفقیت ویرایش شد", { headers: newHeaders });
 }

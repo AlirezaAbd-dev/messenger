@@ -56,12 +56,15 @@ const verifyTokens = async (headers: Headers) => {
     );
   }
 
+  const newHeaders = new Headers({ "x-auth-token": "" });
+  newHeaders.set("x-auth-token", newToken ? newToken : "");
+
   // Retiurning data from token
   return {
     email: verifyToken
       ? (verifyToken as unknown as jwt.JwtPayload & { email: string }).email
       : (refreshToken as unknown as jwt.JwtPayload & { email: string }).email,
-    newToken,
+    newHeaders,
   };
 };
 
