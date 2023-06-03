@@ -5,6 +5,11 @@ import createContactValidation from "../../validation/createContactValidation";
 import verifyTokens from "../../utils/verifyTokens";
 import dbConnect from "../../config/dbConnect";
 import UserModel, { UserSchema } from "@/server/models/UserModel";
+import ConversationModel, {
+  Conversation,
+  ConversationSchema,
+} from "@/server/models/ConversationModel";
+import mongoose, { Document } from "mongoose";
 
 export default async function addContact(req: NextRequest) {
   // Getting headers
@@ -88,12 +93,23 @@ export default async function addContact(req: NextRequest) {
       { status: 404, headers: newHeaders }
     );
   }
+  
+  const newConversation: Conversation = await ConversationModel.create({
+    participants: [
+      {
+        userId: findUser._id,
+        avatar: findUser._id,
+      },
+      { userId: userExistToAdd._id, avatar: userExistToAdd.avatar },
+    ],
+  });
 
   //   Push the new contact if already not exist
   findUser.contacts?.push({
     email: validatedBody.data.email,
     name: validatedBody.data.name,
     avatar: userExistToAdd.avatar || null,
+    conversationId: newConversation._id,
   });
 
   //   Save the data

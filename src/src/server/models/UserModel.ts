@@ -1,6 +1,10 @@
 import mongoose, { InferSchemaType, Document } from "mongoose";
 
 const contact = new mongoose.Schema({
+  conversationId: {
+    type: mongoose.SchemaTypes.ObjectId,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
