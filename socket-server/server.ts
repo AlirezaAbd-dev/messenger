@@ -46,8 +46,6 @@ io.use((socket, next) => {
 io.on("connection", async (socket) => {
   const selfId = socket.id;
 
-  UserModel.findOne({ email: "" });
-
   // Error handling
   socket.on("error", (err) => {
     socket.to(selfId).emit("auth-error", err.message);
