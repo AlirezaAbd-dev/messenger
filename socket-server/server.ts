@@ -33,6 +33,8 @@ server.listen(3001, () => {
   console.log("server socket is running on port 3001.");
 });
 
+let onlineUsers: string[] = [];
+
 io.use((socket, next) => {
   const verifyToken = socket.handshake.headers["x-auth-token"];
   const refreshToken = socket.handshake.headers["x-refresh-token"];
@@ -58,11 +60,18 @@ io.on("connection", async (socket) => {
     }
   });
 
+  let findUser: UserSchema | null;
   if (myEmail) {
-    const findUser = await UserModel.findOne<UserSchema>({ email: myEmail });
+    findUser = await UserModel.findOne<UserSchema>({ email: myEmail });
 
     if (!findUser) {
       throw new Error("شما اجازه دسترسی به این بخش را ندارید!");
+    }
+
+    // If user's status isn't OFF put it in onlineUsers array
+    if (findUser?.status !== "OFF") {
+      onlineUsers.push(findUser?._id);
+      findUser.status = "ONLINE";
     }
 
     console.log(findUser);
@@ -81,7 +90,14 @@ io.on("connection", async (socket) => {
   });
 
   // When user disconnected
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
+    if (findUser) {
+      onlineUsers = onlineUsers.filter((u) => u !== findUser?._id);
+      if (findUser.status !== "OFF") {
+        findUser.status = "OFFLINE";
+        await findUser.save();
+      }
+    }
     console.log("you are desconnected!");
   });
 });
