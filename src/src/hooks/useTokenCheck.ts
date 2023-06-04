@@ -16,9 +16,11 @@ const useTokenCheck = () => {
     });
   }, []);
 
-  if (!tokens?.verifyToken || !tokens?.refreshToken) {
-    router.replace("/signIn");
-  }
+  useEffect(() => {
+    if (!tokens?.verifyToken || !tokens?.refreshToken) {
+      router.replace("/signIn");
+    }
+  }, [tokens, router]);
 
   return tokens;
 };
