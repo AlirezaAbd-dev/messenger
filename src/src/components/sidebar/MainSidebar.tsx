@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import useContactsStore from "@/zustand/contactsStore";
 import TabsSection from "./TabsSection";
-import socket from "@/socket";
 
 const MainSidebar = () => {
   const fetchContacts = useContactsStore((state) => state.fetchContacts);
@@ -23,14 +22,6 @@ const MainSidebar = () => {
       setIsInSlug(false);
     }
   }, [pathname]);
-
-  socket.on("connect", () => {
-    alert("socket connected.");
-  });
-
-  socket.on("connect_error", (err) => {
-    console.log(err);
-  });
 
   return (
     <section
