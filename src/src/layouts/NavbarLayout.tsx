@@ -19,7 +19,7 @@ const NavbarLayout = () => {
       socket.on("connect", () => {
         setTitle("پیامرسان");
       });
-      socket.on("connect_error", (err) => {
+      socket.on("connect_error", (_err) => {
         setTitle("در حال برقراری اتصال");
       });
       socket.on("auth-error", (_err) => {

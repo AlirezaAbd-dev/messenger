@@ -2,6 +2,7 @@ import { createServer } from "http";
 
 import express from "express";
 import { Server } from "socket.io";
+import { Socket } from "socket.io";
 import { config } from "dotenv";
 
 config({ path: "./config/.env" });
@@ -12,12 +13,10 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "../socketTypes";
-import verifyTokens from "./helpers/verifyToken";
-import UserModel, { UserSchema } from "./models/UserModel";
 
 const app = express();
 const server = createServer(app);
-const io = new Server<
+export const io = new Server<
   ClientToServerEvents,
   ServerToClientEvents,
   any,
@@ -27,88 +26,36 @@ const io = new Server<
 });
 
 import "./config/dbConnect";
-import { ConversationSchema } from "./models/ConversationModel";
 import redisClient from "./config/redisClient";
+import checkTokensMiddleware from "./middlewares/ckeckTokensMiddleware";
+import loginHandler from "./handlers/loginHandler";
+import defaultHandlers from "./handlers/defaultHandlers";
 
 (async () => {
   await redisClient.connect();
+
+  server.listen(3001, () => {
+    console.log("server socket is running on port 3001.");
+  });
+
+  let onlineUsers: string[] = [];
+
+  // Authorization middleware
+  checkTokensMiddleware(io);
+
+  io.on("connection", async (socket) => {
+    const selfId = socket.id;
+
+    console.log(selfId);
+
+    const [findUser, myEmail] = await loginHandler(
+      io,
+      socket,
+      selfId,
+      onlineUsers
+    ).then((res) => [res?.findUser, res?.myEmail]);
+
+    // Default events like "error" or "disconnect"
+    await defaultHandlers(socket, findUser, selfId, onlineUsers);
+  });
 })();
-
-server.listen(3001, () => {
-  console.log("server socket is running on port 3001.");
-});
-
-let onlineUsers: string[] = [];
-
-io.use((socket, next) => {
-  const verifyToken = socket.handshake.headers["x-auth-token"];
-  const refreshToken = socket.handshake.headers["x-refresh-token"];
-
-  if (!verifyToken || !refreshToken) {
-    next(new Error("شما دسترسی برای این کار را ندارید!"));
-    return;
-  }
-
-  next();
-});
-
-io.on("connection", async (socket) => {
-  const selfId = socket.id;
-  let myEmail: string = "";
-  let findUser: UserSchema | null;
-
-  await verifyTokens(socket.handshake.headers, (err, email) => {
-    if (err) {
-      return socket.in(selfId).emit("auth-error", err);
-    }
-    if (email) {
-      myEmail = email;
-    }
-  });
-
-  if (myEmail) {
-    findUser = await UserModel.findOne<UserSchema>({ email: myEmail });
-
-    if (!findUser) {
-      return socket.to(selfId).emit("auth-error", "شما اجازه دسترسی ندارید!");
-    }
-
-    socket.join(findUser._id);
-
-    // If user's status isn't OFF put it in onlineUsers array
-    if (findUser?.status !== "OFF") {
-      onlineUsers.push(findUser?._id);
-      findUser.status = "ONLINE";
-    }
-
-    console.log(findUser);
-
-    if (findUser.conversations.length > 0) {
-      const conversations = await findUser.populate<ConversationSchema[]>(
-        "conversations"
-      );
-
-      conversations.forEach((c) => {
-        socket.join(c._id.toString());
-      });
-
-      console.log(conversations);
-    }
-  }
-
-  // Error handling
-  socket.on("error", (err) => {
-    socket.to(selfId).emit("error", err.message);
-  });
-
-  // When user disconnected
-  socket.on("disconnect", async () => {
-    if (findUser) {
-      onlineUsers = onlineUsers.filter((u) => u !== findUser?._id);
-      if (findUser.status !== "OFF") {
-        findUser.status = "OFFLINE";
-        await findUser.save();
-      }
-    }
-  });
-});
