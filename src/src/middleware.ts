@@ -13,6 +13,10 @@ const middleware = async (req: NextRequest) => {
   ) {
     // I just placed it for future uses
   }
+
+  if (url.pathname.startsWith("/home")) {
+    console.log("yoyo");
+  }
 };
 
 export const config = {

@@ -1,11 +1,13 @@
 "use client";
 
-import socket from "@/socket";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import useSocket from "@/zustand/socketStore";
+
 const NavbarLayout = () => {
   const [title, setTitle] = useState("");
+  const socket = useSocket((state) => state.socket);
 
   const router = useRouter();
 
@@ -26,7 +28,7 @@ const NavbarLayout = () => {
         socket.disconnect();
       });
     }
-  }, [setTitle, router]);
+  }, [setTitle, router, socket]);
 
   return (
     <nav className="flex h-10 w-full items-center justify-center bg-zinc-800 py-2 text-lg font-bold text-yellow-500 shadow-xl md:h-16 md:text-xl">
