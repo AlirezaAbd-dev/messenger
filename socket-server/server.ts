@@ -50,6 +50,7 @@ io.use((socket, next) => {
 io.on("connection", async (socket) => {
   const selfId = socket.id;
   let myEmail: string = "";
+  let findUser: UserSchema | null;
 
   await verifyTokens(socket.handshake.headers, (err, email) => {
     if (err) {
@@ -60,13 +61,14 @@ io.on("connection", async (socket) => {
     }
   });
 
-  let findUser: UserSchema | null;
   if (myEmail) {
     findUser = await UserModel.findOne<UserSchema>({ email: myEmail });
 
     if (!findUser) {
       throw new Error("شما اجازه دسترسی به این بخش را ندارید!");
     }
+
+    socket.join(findUser._id);
 
     // If user's status isn't OFF put it in onlineUsers array
     if (findUser?.status !== "OFF") {
@@ -77,9 +79,14 @@ io.on("connection", async (socket) => {
     console.log(findUser);
 
     if (findUser.conversations.length > 0) {
-      const conversations = await findUser.populate<ConversationSchema>(
+      const conversations = await findUser.populate<ConversationSchema[]>(
         "conversations"
       );
+
+      conversations.forEach((c) => {
+        socket.join(c._id.toString());
+      });
+
       console.log(conversations);
     }
   }
