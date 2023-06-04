@@ -1,18 +1,24 @@
 import jwt from "jsonwebtoken";
+import { IncomingHttpHeaders } from "http";
 
 import redisClient from "../config/redisClient";
 
-const verifyTokens = async (headers: Headers) => {
+const verifyTokens = async (
+  headers: IncomingHttpHeaders,
+  callback: (err?: string, email?: string) => void
+) => {
   let newToken = "";
 
   // Removin the Bearer from headers
-  const unverifiedToken = headers.get("x-auth-token")!.startsWith("Bearer")
-    ? headers.get("x-auth-token")!.split(" ")[1]
+  const unverifiedToken = (headers["x-auth-token"] as string).startsWith(
+    "Bearer"
+  )
+    ? (headers["x-auth-token"] as string).split(" ")[1]
     : "";
-  const unverifiedRefreshToken = headers
-    .get("x-refresh-token")!
-    .startsWith("Bearer")
-    ? headers.get("x-refresh-token")!.split(" ")[1]
+  const unverifiedRefreshToken = (
+    headers["x-refresh-token"] as string
+  ).startsWith("Bearer")
+    ? (headers["x-refresh-token"] as string).split(" ")[1]
     : "";
 
   let refreshToken;
@@ -26,7 +32,7 @@ const verifyTokens = async (headers: Headers) => {
     try {
       refreshToken = jwt.decode(unverifiedRefreshToken);
     } catch (err) {
-      return { error: "شما اجازه دسترسی ندارید!" };
+      return callback("شما اجازه دسترسی ندارید!");
     }
 
     // Check if there is the same token in redis or what?
@@ -43,7 +49,7 @@ const verifyTokens = async (headers: Headers) => {
     }
 
     if (!redisMembers) {
-      return { error: "شما اجازه دسترسی ندارید!" };
+      return callback("شما اجازه دسترسی ندارید!");
     }
 
     // Making a new token if the check above was true
@@ -56,16 +62,13 @@ const verifyTokens = async (headers: Headers) => {
     );
   }
 
-  const newHeaders = new Headers({ "x-auth-token": "" });
-  newHeaders.set("x-auth-token", newToken ? newToken : "");
-
   // Retiurning data from token
-  return {
-    email: verifyToken
+  return callback(
+    undefined,
+    verifyToken
       ? (verifyToken as unknown as jwt.JwtPayload & { email: string }).email
-      : (refreshToken as unknown as jwt.JwtPayload & { email: string }).email,
-    newHeaders,
-  };
+      : (refreshToken as unknown as jwt.JwtPayload & { email: string }).email
+  );
 };
 
 export default verifyTokens;

@@ -5,11 +5,6 @@ import createContactValidation from "../../validation/createContactValidation";
 import verifyTokens from "../../utils/verifyTokens";
 import dbConnect from "../../config/dbConnect";
 import UserModel, { UserSchema } from "@/server/models/UserModel";
-import ConversationModel, {
-  Conversation,
-  ConversationSchema,
-} from "@/server/models/ConversationModel";
-import mongoose, { Document } from "mongoose";
 
 export default async function addContact(req: NextRequest) {
   // Getting headers

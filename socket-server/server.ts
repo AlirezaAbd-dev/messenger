@@ -12,7 +12,8 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "../socketTypes";
-import UserModel from "./models/UserModel";
+import verifyTokens from "./helpers/verifyToken";
+import UserModel, { UserSchema } from "./models/UserModel";
 
 const app = express();
 const server = createServer(app);
@@ -26,6 +27,7 @@ const io = new Server<
 });
 
 import "./config/dbConnect";
+import { ConversationSchema } from "./models/ConversationModel";
 
 server.listen(3001, () => {
   console.log("server socket is running on port 3001.");
@@ -45,6 +47,33 @@ io.use((socket, next) => {
 
 io.on("connection", async (socket) => {
   const selfId = socket.id;
+  let myEmail: string = "";
+
+  await verifyTokens(socket.handshake.headers, (err, email) => {
+    if (err) {
+      throw new Error(err);
+    }
+    if (email) {
+      myEmail = email;
+    }
+  });
+
+  if (myEmail) {
+    const findUser = await UserModel.findOne<UserSchema>({ email: myEmail });
+
+    if (!findUser) {
+      throw new Error("شما اجازه دسترسی به این بخش را ندارید!");
+    }
+
+    console.log(findUser);
+
+    if (findUser.conversations.length > 0) {
+      const conversations = await findUser.populate<ConversationSchema>(
+        "conversations"
+      );
+      console.log(conversations);
+    }
+  }
 
   // Error handling
   socket.on("error", (err) => {
