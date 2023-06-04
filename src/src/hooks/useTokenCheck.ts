@@ -1,28 +1,17 @@
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const useTokenCheck = () => {
-  const [tokens, setTokens] = useState<{
-    verifyToken?: string;
-    refreshToken?: string;
-  }>();
-
   const router = useRouter();
 
   useEffect(() => {
-    setTokens({
-      verifyToken: localStorage.getItem("verify-token") || undefined,
-      refreshToken: localStorage.getItem("refresh-token") || undefined,
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!tokens?.verifyToken || !tokens?.refreshToken) {
+    if (
+      !localStorage.getItem("verify-token") ||
+      !localStorage.getItem("refresh-token")
+    ) {
       router.replace("/signIn");
     }
-  }, [tokens, router]);
-
-  return tokens;
+  }, [router]);
 };
 
 export default useTokenCheck;
