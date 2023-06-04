@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const useTokenCheck = () => {
+const useAuthorization = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -9,9 +9,9 @@ const useTokenCheck = () => {
       !localStorage.getItem("verify-token") ||
       !localStorage.getItem("refresh-token")
     ) {
-      router.replace("/signIn");
+      return router.replace("/signIn");
     }
   }, [router]);
 };
 
-export default useTokenCheck;
+export default useAuthorization;
