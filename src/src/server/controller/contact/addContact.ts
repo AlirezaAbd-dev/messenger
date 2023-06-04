@@ -93,23 +93,12 @@ export default async function addContact(req: NextRequest) {
       { status: 404, headers: newHeaders }
     );
   }
-  
-  const newConversation: Conversation = await ConversationModel.create({
-    participants: [
-      {
-        userId: findUser._id,
-        avatar: findUser._id,
-      },
-      { userId: userExistToAdd._id, avatar: userExistToAdd.avatar },
-    ],
-  });
 
   //   Push the new contact if already not exist
   findUser.contacts?.push({
     email: validatedBody.data.email,
     name: validatedBody.data.name,
     avatar: userExistToAdd.avatar || null,
-    conversationId: newConversation._id,
   });
 
   //   Save the data
