@@ -28,6 +28,11 @@ const io = new Server<
 
 import "./config/dbConnect";
 import { ConversationSchema } from "./models/ConversationModel";
+import redisClient from "./config/redisClient";
+
+(async () => {
+  await redisClient.connect();
+})();
 
 server.listen(3001, () => {
   console.log("server socket is running on port 3001.");
@@ -54,7 +59,7 @@ io.on("connection", async (socket) => {
 
   await verifyTokens(socket.handshake.headers, (err, email) => {
     if (err) {
-      throw new Error(err);
+      return socket.in(selfId).emit("auth-error", err);
     }
     if (email) {
       myEmail = email;
@@ -65,7 +70,7 @@ io.on("connection", async (socket) => {
     findUser = await UserModel.findOne<UserSchema>({ email: myEmail });
 
     if (!findUser) {
-      throw new Error("شما اجازه دسترسی به این بخش را ندارید!");
+      return socket.to(selfId).emit("auth-error", "شما اجازه دسترسی ندارید!");
     }
 
     socket.join(findUser._id);
@@ -93,7 +98,7 @@ io.on("connection", async (socket) => {
 
   // Error handling
   socket.on("error", (err) => {
-    socket.to(selfId).emit("auth-error", err.message);
+    socket.to(selfId).emit("error", err.message);
   });
 
   // When user disconnected
@@ -105,6 +110,5 @@ io.on("connection", async (socket) => {
         await findUser.save();
       }
     }
-    console.log("you are desconnected!");
   });
 });

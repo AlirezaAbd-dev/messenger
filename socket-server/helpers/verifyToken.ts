@@ -38,12 +38,10 @@ const verifyTokens = async (
     // Check if there is the same token in redis or what?
     let redisMembers;
     try {
-      await redisClient.connect();
       redisMembers = await redisClient.sIsMember(
         process.env.REDIS_TOKEN_KEY,
         unverifiedRefreshToken
       );
-      await redisClient.disconnect();
     } catch (err) {
       console.log(err);
     }

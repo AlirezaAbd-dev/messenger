@@ -4,8 +4,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import useContactsStore from "@/zustand/contactsStore";
 import TabsSection from "./TabsSection";
+import useTokenCheck from "@/hooks/useTokenCheck";
 
 const MainSidebar = () => {
+  useTokenCheck();
   const fetchContacts = useContactsStore((state) => state.fetchContacts);
 
   const [isInSlug, setIsInSlug] = useState<boolean>(false);

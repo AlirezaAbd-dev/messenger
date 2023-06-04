@@ -1,6 +1,5 @@
 import MainSidebar from "@/components/sidebar/MainSidebar";
 import NavbarLayout from "@/layouts/NavbarLayout";
-import socket from "@/socket";
 import dynamic from "next/dynamic";
 
 const Modal = dynamic(() => import("@/components/modal/Modal"));
