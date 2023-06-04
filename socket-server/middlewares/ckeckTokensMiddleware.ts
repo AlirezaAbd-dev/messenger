@@ -1,4 +1,4 @@
-import { Io } from "../server";
+import { Io } from "../types";
 
 const checkTokensMiddleware = (io: Io) => {
   io.use((socket, next) => {
