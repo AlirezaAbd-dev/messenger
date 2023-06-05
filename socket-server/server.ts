@@ -2,7 +2,6 @@ import { createServer } from "http";
 
 import express from "express";
 import { Server } from "socket.io";
-import { Socket } from "socket.io";
 import { config } from "dotenv";
 
 config({ path: "./config/.env" });
@@ -13,6 +12,12 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "../socketTypes";
+import redisClient from "./config/redisClient";
+import checkTokensMiddleware from "./middlewares/ckeckTokensMiddleware";
+import loginHandler from "./handlers/loginHandler";
+import defaultHandlers from "./handlers/defaultHandlers";
+
+import "./config/dbConnect";
 
 const app = express();
 const server = createServer(app);
@@ -24,12 +29,6 @@ export const io = new Server<
 >(server, {
   cors: { origin: "http://localhost:3000" },
 });
-
-import "./config/dbConnect";
-import redisClient from "./config/redisClient";
-import checkTokensMiddleware from "./middlewares/ckeckTokensMiddleware";
-import loginHandler from "./handlers/loginHandler";
-import defaultHandlers from "./handlers/defaultHandlers";
 
 (async () => {
   await redisClient.connect();
@@ -54,6 +53,8 @@ import defaultHandlers from "./handlers/defaultHandlers";
       selfId,
       onlineUsers
     ).then((res) => [res?.findUser, res?.myEmail]);
+
+    
 
     // Default events like "error" or "disconnect"
     await defaultHandlers(socket, findUser, selfId, onlineUsers);

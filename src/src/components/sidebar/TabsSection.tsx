@@ -22,12 +22,12 @@ const TabsSection = () => {
         ))}
       </Tab.List>
       <Tab.Panels>
-        {/* Contacts Panel */}
         <Tab.Panel>
+          {/* Contacts Panel */}
           <ContactsPanel />
         </Tab.Panel>
-        {/* Conversation Panel */}
         <Tab.Panel>
+          {/* Conversation Panel */}
           <ConversationsPanel />
         </Tab.Panel>
       </Tab.Panels>
