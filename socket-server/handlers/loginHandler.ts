@@ -9,7 +9,7 @@ const loginHandler = async (
   selfId: string,
   onlineUsers: string[]
 ) => {
-  let myEmail;
+  let myEmail: string = "";
   let findUser;
 
   await verifyTokens(socket.handshake.headers, (err, email) => {
@@ -25,11 +25,11 @@ const loginHandler = async (
     findUser = await UserModel.findOne<UserSchema>({ email: myEmail });
 
     if (!findUser) {
-      socket.to(selfId).emit("auth-error", "شما اجازه دسترسی ندارید!");
+      io.to(selfId).emit("auth-error", "شما اجازه دسترسی ندارید!");
       return;
     }
 
-    socket.join(findUser._id);
+    socket.join(findUser._id.toString());
 
     // If user's status isn't OFF put it in onlineUsers array
     if (findUser?.status !== "OFF") {
@@ -38,14 +38,11 @@ const loginHandler = async (
     }
 
     if (findUser.conversations.length > 0) {
-      const conversations = await findUser.populate<ConversationSchema[]>(
-        "conversations"
-      );
-
-      conversations.forEach((c) => {
+      findUser.conversations.forEach((c) => {
         socket.join(c._id.toString());
       });
     }
+    console.log(socket.rooms);
   }
 
   return { findUser, myEmail };

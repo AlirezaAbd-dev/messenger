@@ -18,6 +18,7 @@ import loginHandler from "./handlers/loginHandler";
 import defaultHandlers from "./handlers/defaultHandlers";
 
 import "./config/dbConnect";
+import conversationHandlers from "./handlers/conversationHandlers";
 
 const app = express();
 const server = createServer(app);
@@ -47,14 +48,17 @@ export const io = new Server<
 
     console.log(selfId);
 
-    const [findUser, myEmail] = await loginHandler(
+    const { findUser, myEmail } = await loginHandler(
       io,
       socket,
       selfId,
       onlineUsers
-    ).then((res) => [res?.findUser, res?.myEmail]);
+    ).then((res) => ({
+      findUser: res?.findUser,
+      myEmail: res?.myEmail as string,
+    }));
 
-    
+    await conversationHandlers(io, socket, myEmail);
 
     // Default events like "error" or "disconnect"
     await defaultHandlers(socket, findUser, selfId, onlineUsers);

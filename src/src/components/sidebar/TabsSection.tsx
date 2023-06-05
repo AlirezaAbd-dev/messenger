@@ -1,3 +1,4 @@
+"use client";
 import { Tab } from "@headlessui/react";
 import MainTab from "./MainTab";
 import ContactsPanel from "./ContactsPanel";

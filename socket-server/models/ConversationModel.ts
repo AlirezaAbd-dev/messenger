@@ -5,6 +5,7 @@ const conversationSchema = new mongoose.Schema(
     _id: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
+      default: new mongoose.Types.ObjectId(),
     },
     name: {
       type: String,
