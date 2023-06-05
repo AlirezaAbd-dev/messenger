@@ -23,7 +23,7 @@ const ConversationCard = (props: { conversation: Conversation }) => {
             {/* Name */}
             <h3>{conversation.name}</h3>
             {/* Last Message Date */}
-            <p>{conversation.lastMessageDate}</p>
+            <p>{conversation.lastMessageDate.toString()}</p>
           </div>
           {/* Last Message Ellipsis Content */}
           <p className="text-xs">{conversation.lastMessage}</p>

@@ -42,7 +42,6 @@ const loginHandler = async (
         socket.join(c._id.toString());
       });
     }
-    console.log(socket.rooms);
   }
 
   return { findUser, myEmail };

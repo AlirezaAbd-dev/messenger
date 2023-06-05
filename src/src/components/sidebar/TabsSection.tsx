@@ -3,6 +3,10 @@ import { Tab } from "@headlessui/react";
 import MainTab from "./MainTab";
 import ContactsPanel from "./ContactsPanel";
 import ConversationsPanel from "./ConversationsPanel";
+import useSocket from "@/zustand/socketStore";
+import useConversation from "@/zustand/conversationStore";
+import { useEffect, useState } from "react";
+import socket from "@/socket";
 
 const tabs = [
   {
@@ -14,6 +18,29 @@ const tabs = [
 ];
 
 const TabsSection = () => {
+  const [setConversation] = useConversation((state) => [state.setConversation]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      socket.emit("conversations:getAll");
+      socket.on("conversations:getAll", (conversations) => {
+        setConversation(
+          conversations.map((c) => ({
+            _id: c._id.toString(),
+            lastMessage:
+              c.messages.length > 0
+                ? c.messages[c.messages.length - 1].toString()
+                : "",
+            name: c.name,
+            lastMessageDate: new Date(c.updatedAt).toLocaleTimeString("fa"),
+            avatar: c.avatar,
+          }))
+        );
+        console.log(conversations);
+      });
+    }, 1000);
+  }, [socket.active, setConversation]);
+
   return (
     <Tab.Group defaultIndex={1}>
       {/* Tabs */}

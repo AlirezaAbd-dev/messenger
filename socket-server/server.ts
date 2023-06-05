@@ -46,8 +46,6 @@ export const io = new Server<
   io.on("connection", async (socket) => {
     const selfId = socket.id;
 
-    console.log(selfId);
-
     const { findUser, myEmail } = await loginHandler(
       io,
       socket,
