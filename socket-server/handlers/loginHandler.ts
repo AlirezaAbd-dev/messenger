@@ -44,6 +44,8 @@ const loginHandler = async (
     }
   }
 
+  socket.emit("conversations:start");
+
   return { findUser, myEmail };
 };
 

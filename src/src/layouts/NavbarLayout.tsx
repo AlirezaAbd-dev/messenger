@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import useSocket from "@/zustand/socketStore";
+import socket from "@/socket";
 
 const NavbarLayout = () => {
   const [title, setTitle] = useState("");
-  const socket = useSocket((state) => state.socket);
 
   const router = useRouter();
 
@@ -22,13 +22,13 @@ const NavbarLayout = () => {
       socket.on("connect_error", (_err) => {
         setTitle("در حال برقراری اتصال");
       });
-      socket.on("auth-error", (_err) => {
-        console.log("yoyo");
+      socket.on("auth-error", (err) => {
+        console.log(err);
         router.replace("/signIn");
         socket.disconnect();
       });
     }
-  }, [setTitle, router, socket]);
+  }, [setTitle, router]);
 
   return (
     <nav className="flex h-10 w-full items-center justify-center bg-zinc-800 py-2 text-lg font-bold text-yellow-500 shadow-xl md:h-16 md:text-xl">

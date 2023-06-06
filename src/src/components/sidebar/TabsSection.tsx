@@ -3,10 +3,10 @@ import { Tab } from "@headlessui/react";
 import MainTab from "./MainTab";
 import ContactsPanel from "./ContactsPanel";
 import ConversationsPanel from "./ConversationsPanel";
-import useSocket from "@/zustand/socketStore";
 import useConversation from "@/zustand/conversationStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import socket from "@/socket";
+import { shallow } from "zustand/shallow";
 
 const tabs = [
   {
@@ -18,11 +18,17 @@ const tabs = [
 ];
 
 const TabsSection = () => {
-  const [setConversation] = useConversation((state) => [state.setConversation]);
+  const [setConversation, setIsLoading] = useConversation(
+    (state) => [state.setConversation, state.setIsLoading],
+    shallow
+  );
 
   useEffect(() => {
-    setTimeout(() => {
-      socket.emit("conversations:getAll");
+    setIsLoading(true);
+    socket.on("conversations:start", () => {
+      socket.emitWithAck("conversations:getAll").catch((err) => {
+        socket.timeout(3000).emit("conversations:getAll");
+      });
       socket.on("conversations:getAll", (conversations) => {
         setConversation(
           conversations.map((c) => ({
@@ -36,10 +42,11 @@ const TabsSection = () => {
             avatar: c.avatar,
           }))
         );
+        setIsLoading(false);
         console.log(conversations);
       });
-    }, 1000);
-  }, [socket.active, setConversation]);
+    });
+  }, [setIsLoading, setConversation]);
 
   return (
     <Tab.Group defaultIndex={1}>

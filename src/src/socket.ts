@@ -9,6 +9,7 @@ const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       "x-auth-token": localStorage?.getItem("verify-token")!,
       "x-refresh-token": localStorage?.getItem("refresh-token")!,
     },
+    autoConnect: true,
   }
 );
 
