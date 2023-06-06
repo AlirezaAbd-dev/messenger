@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import useSocket from "@/zustand/socketStore";
 import socket from "@/socket";
 
 const NavbarLayout = () => {

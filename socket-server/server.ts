@@ -43,6 +43,7 @@ export const io = new Server<
   // Authorization middleware
   checkTokensMiddleware(io);
 
+  //? Events
   io.on("connection", async (socket) => {
     const selfId = socket.id;
 
@@ -56,6 +57,7 @@ export const io = new Server<
       myEmail: res?.myEmail as string,
     }));
 
+    // Conversation events
     await conversationHandlers(io, socket, myEmail);
 
     // Default events like "error" or "disconnect"

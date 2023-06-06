@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import ConversationModel, {
   Conversation,
   ConversationSchema,
@@ -23,10 +22,54 @@ const conversationHandlers = async (
       });
 
     console.log("conversations found");
-    io.to(socket.id).emit(
-      "conversations:getAll",
-      conversations as Conversation[]
-    );
+
+    let lastConversations: Conversation[] = [];
+
+    conversations.forEach(async (conversation, index) => {
+      if (conversation.role === "PRIVATE") {
+        const filteredParticipants = conversation.participants.filter(
+          (p) => p.userId !== findUser._id
+        );
+
+        const filteredContact = findUser.contacts.find(
+          (c) => c._id === filteredParticipants[0].userId
+        );
+
+        if (filteredContact) {
+          lastConversations.push({
+            _id: conversation._id,
+            avatar: conversation.avatar,
+            createdAt: conversation.createdAt,
+            messages: conversation.messages,
+            participants: conversation.participants,
+            role: conversation.role,
+            updatedAt: conversation.updatedAt,
+            name: filteredContact.name,
+          });
+        } else {
+          const participant = await UserModel.findById<UserSchema>(
+            filteredParticipants[0].userId
+          );
+          lastConversations.push({
+            _id: conversation._id,
+            avatar: conversation.avatar,
+            createdAt: conversation.createdAt,
+            messages: conversation.messages,
+            participants: conversation.participants,
+            role: conversation.role,
+            updatedAt: conversation.updatedAt,
+            name: participant?.name || "Unknown User",
+          });
+        }
+      }
+      if (conversations.length - 1 === index) {
+        console.log(lastConversations);
+        io.to(socket.id).emit(
+          "conversations:getAll",
+          lastConversations as Conversation[]
+        );
+      }
+    });
   });
 };
 

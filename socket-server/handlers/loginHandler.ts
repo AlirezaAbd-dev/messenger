@@ -1,5 +1,4 @@
 import verifyTokens from "../helpers/verifyToken";
-import { ConversationSchema } from "../models/ConversationModel";
 import UserModel, { UserSchema } from "../models/UserModel";
 import { ConnectedSocket, Io } from "../types";
 
