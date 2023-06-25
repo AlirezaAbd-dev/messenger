@@ -70,12 +70,15 @@ const conversationHandlers = async (
             });
           }
         }
+
+        // Send all the conversations to user
         io.to(socket.id).emit(
           "conversations:getAll",
           lastConversations as Conversation[]
         );
       });
     } else {
+      // Send an empty array if there is no conversation for user
       io.to(socket.id).emit("conversations:getAll", []);
     }
   });
