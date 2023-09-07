@@ -1,10 +1,9 @@
+import { z } from 'zod';
 import envSchema from './envSchema';
 
 declare global {
    namespace NodeJS {
-      interface ProcessEnv {
-         DATABASE_URL: string;
-      }
+      interface ProcessEnv extends z.infer<typeof envSchema> {}
    }
 }
 

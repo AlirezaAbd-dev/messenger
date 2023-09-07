@@ -1,5 +1,4 @@
-import { cookies } from 'next/headers';
-//  import { getUserAuth } from "../auth/utils";
+import { cookies} from 'next/headers';
 import { appRouter } from '../server/routers/_app';
 import { loggerLink } from '@trpc/client';
 import { experimental_createTRPCNextAppDirServer as createTRPCNextAppDirServer } from '@trpc/next/app-dir/server';
@@ -18,7 +17,7 @@ export const api = createTRPCNextAppDirServer<typeof appRouter>({
          transformer: SuperJSON,
          links: [
             loggerLink({
-               enabled: (op) => true,
+               enabled: (_op) => true,
             }),
             nextCacheLink({
                revalidate: 1,
