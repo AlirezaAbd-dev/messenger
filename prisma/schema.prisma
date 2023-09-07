@@ -17,21 +17,26 @@ enum STATUS {
 }
 
 model Users {
-  id        String   @unique @default(uuid())
+  id        String   @id @default(uuid())
+  username  String?  @unique
   name      String
-  email     String
+  email     String   @unique @db.VarChar(254)
   avatar    String?
   status    STATUS   @default(OFFLINE)
+  bio       String?  @db.VarChar(150)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   contacts     Contacts[] @relation("contact")
   contactsBack Contacts[] @relation("contactBack")
-  Messages     Messages[]
+
+  Messages Messages[]
+
+  Conversations Conversations[] @relation("participant")
 }
 
 model Contacts {
-  id        String   @unique @default(uuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -43,8 +48,8 @@ model Contacts {
 }
 
 model Messages {
-  id        String   @unique @default(uuid())
-  content   String   @db.VarChar(500)
+  id        String   @id @default(uuid())
+  content   String   @db.VarChar(4096)
   seen      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -55,4 +60,24 @@ model Messages {
   reply            Messages?  @relation("reply", fields: [repliedMessageId], references: [id])
   RepliedMessage   Messages[] @relation("reply")
   repliedMessageId String?
+
+  Conversations   Conversations? @relation(fields: [conversationsId], references: [id])
+  conversationsId String?
+}
+
+enum ConversationType {
+  PRIVATE
+  GROUP
+}
+
+model Conversations {
+  id        String           @id @default(uuid())
+  name      String
+  avatar    String?
+  type      ConversationType @default(PRIVATE)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  messages     Messages[]
+  participants Users[]    @relation("participant")
 }
