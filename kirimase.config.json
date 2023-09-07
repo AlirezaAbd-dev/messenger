@@ -1,0 +1,10 @@
+{
+  "driver": null,
+  "hasSrc": true,
+  "provider": null,
+  "packages": [
+    "trpc",
+    "shadcn-ui"
+  ],
+  "preferredPackageManager": "pnpm"
+}
