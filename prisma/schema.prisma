@@ -10,3 +10,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum STATUS {
+  OFFLINE
+  ONLINE
+  OFF
+}
+
+model Users {
+  id        String   @unique @default(uuid())
+  name      String
+  email     String
+  avatar    String?
+  status    STATUS   @default(OFFLINE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contacts     Contacts[] @relation("contact")
+  contactsBack Contacts[] @relation("contactBack")
+  Messages     Messages[]
+}
+
+model Contacts {
+  id        String   @unique @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Users   Users  @relation("contact", fields: [usersId], references: [id], onDelete: Cascade)
+  usersId String
+
+  contact   Users  @relation("contactBack", fields: [contactId], references: [id], onDelete: Cascade)
+  contactId String
+}
+
+model Messages {
+  id        String   @unique @default(uuid())
+  content   String   @db.VarChar(500)
+  seen      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sender   Users  @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId String
+
+  reply            Messages?  @relation("reply", fields: [repliedMessageId], references: [id])
+  RepliedMessage   Messages[] @relation("reply")
+  repliedMessageId String?
+}
