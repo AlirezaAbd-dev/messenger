@@ -45,6 +45,8 @@ model Contacts {
 
   contact   Users  @relation("contactBack", fields: [contactId], references: [id], onDelete: Cascade)
   contactId String
+
+  @@unique([usersId, contactId])
 }
 
 model Messages {
