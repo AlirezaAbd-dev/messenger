@@ -1,7 +1,7 @@
 'use client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink, loggerLink } from '@trpc/client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { trpc } from './client';
 import { getUrl } from './utils';
@@ -25,10 +25,27 @@ export default function TrpcProvider({
             }),
             httpBatchLink({
                url: getUrl(),
+               headers: (_op) => {
+                  return {
+                     'x-auth-token':
+                        (localStorage &&
+                           (localStorage?.getItem('x-auth-token') as
+                              | string
+                              | undefined)) ||
+                        '',
+                     'x-refresh-token':
+                        (localStorage &&
+                           (localStorage?.getItem('x-refresh-token') as
+                              | string
+                              | undefined)) ||
+                        '',
+                  };
+               },
             }),
          ],
       }),
    );
+
    return (
       <trpc.Provider
          client={trpcClient}

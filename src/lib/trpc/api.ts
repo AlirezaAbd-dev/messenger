@@ -1,4 +1,4 @@
-import { cookies} from 'next/headers';
+import { cookies } from 'next/headers';
 import { appRouter } from '../server/routers/_app';
 import { loggerLink } from '@trpc/client';
 import { experimental_createTRPCNextAppDirServer as createTRPCNextAppDirServer } from '@trpc/next/app-dir/server';

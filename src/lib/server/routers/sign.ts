@@ -1,8 +1,8 @@
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 
 import cache from '@/lib/config/nodeCache';
 import transport from '@/lib/config/mailTransport';
-import { TRPCError } from '@trpc/server';
 import createToken from '@/lib/helpers/createToken';
 import { publicProcedure, router } from '../trpc';
 
@@ -130,7 +130,7 @@ export const signRouters = router({
             });
          }
 
-         await ctx.prisma.users
+         ctx.prisma.users
             .create({
                data: {
                   email,

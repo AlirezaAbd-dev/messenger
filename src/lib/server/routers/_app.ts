@@ -1,10 +1,10 @@
-import { computersRouter } from "./computers";
-import { router } from "../trpc";
-import { signRouters } from "./sign";
+import { router } from '../trpc';
+import { contactRouters } from './contactRouters';
+import { signRouters } from './sign';
 
 export const appRouter = router({
-  computers: computersRouter,
-  sign: signRouters
+   sign: signRouters,
+   contact: contactRouters
 });
 
 export type AppRouter = typeof appRouter;
