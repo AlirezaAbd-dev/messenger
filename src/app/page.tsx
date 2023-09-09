@@ -1,10 +1,8 @@
 'use client';
 import Image from 'next/image';
 
-import { trpc } from '@/lib/trpc/client';
 
 export default function Home() {
-   const { data } = trpc.contact.getAllContacts.useQuery();
 
    return (
       <main className='flex min-h-screen flex-col items-center justify-between p-24'>
