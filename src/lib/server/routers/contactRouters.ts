@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { protectedProcedure, router } from '../trpc';
 import { z } from 'zod';
+import contactsValidation from '../validation/contactsValidation';
 
 export const contactRouters = router({
    getAllContacts: protectedProcedure.query(async ({ ctx }) => {
@@ -24,22 +25,7 @@ export const contactRouters = router({
       return { contacts, headers: newHeaders };
    }),
    addContact: protectedProcedure
-      .input(
-         z.object({
-            name: z.string({
-               invalid_type_error:
-                  'لطفا نام مخاطب را به صورت رشته وارد نمایید!',
-               required_error: 'لطفا نام مخاطب را وارد نمایید!',
-            }),
-            email: z
-               .string({
-                  invalid_type_error:
-                     'لطفا ایمیل مخاطب را به صورت رشته وارد نمایید!',
-                  required_error: 'لطفا ایمیل مخاطب را وارد نمایید!',
-               })
-               .email({ message: 'لطفا از یک ایمیل معتبر استفاده نمایید!' }),
-         }),
-      )
+      .input(contactsValidation.addContact)
       .mutation(async ({ ctx, input }) => {
          const { email, newHeaders } = ctx.user;
 
@@ -94,18 +80,7 @@ export const contactRouters = router({
          };
       }),
    editContact: protectedProcedure
-      .input(
-         z.object({
-            id: z.string({
-               invalid_type_error: 'لطفا ایدی را با فرمت درست وارد نمایید!',
-               required_error: 'وارد کردن آیدی مخاطب اجباری است!',
-            }),
-            name: z.string({
-               invalid_type_error: 'لطفا نام را با فرمت درست وارد نمایید!',
-               required_error: 'وارد کردن نام مخاطب اجباری است!',
-            }),
-         }),
-      )
+      .input(contactsValidation.editContact)
       .mutation(async ({ ctx, input }) => {
          const { email, newHeaders } = ctx.user;
 
@@ -143,5 +118,33 @@ export const contactRouters = router({
          });
 
          return { message: 'مخاطب با موفقیت ویرایش شد', headers: newHeaders };
+      }),
+   deleteContact: protectedProcedure
+      .input(contactsValidation.deleteContact)
+      .mutation(async ({ ctx, input }) => {
+         const { email, newHeaders } = ctx.user;
+
+         //   Check the existing of user in database
+         const findUser = await ctx.prisma.users.findUnique({
+            where: { email },
+         });
+
+         if (!findUser) {
+            throw new TRPCError({
+               code: 'NOT_FOUND',
+               message: 'کاربر مورد نظر یافت نشد!',
+            });
+         }
+
+         await ctx.prisma.contacts.delete({
+            where: {
+               usersId_contactId: { contactId: input.id, usersId: findUser.id },
+            },
+         });
+
+         return {
+            message: 'مخاطب با موفقیت حذف شد!',
+            headers: newHeaders,
+         };
       }),
 });
