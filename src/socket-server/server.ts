@@ -47,6 +47,7 @@ export const prismaClient = new PrismaClient();
 
    //? Events
    io.on('connection', async (socket) => {
+      console.log(`connected with userId: ${socket.id}`);
       const selfId = socket.id;
 
       const { findUser, myEmail } = await loginHandler(
