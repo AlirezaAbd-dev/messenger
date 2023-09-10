@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+   .background-blur {
+      filter: blur(10px);
+   }
+
+   .inner-shadow-t-custom {
+      background-image: linear-gradient(0deg, rgb(55 65 81 / 0.5), transparent);
+   }
+
+   ::-webkit-scrollbar {
+      width: 5px;
+   }
+
+   ::-webkit-scrollbar-track {
+      background: #333;
+   }
+
+   ::-webkit-scrollbar-thumb {
+      background: rgba(234, 178, 8, 0.697);
+      border-radius: 5px;
+   }
+
+   ::-webkit-scrollbar-thumb:hover {
+      background: rgba(234, 178, 8, 0.362);
+   }
+}

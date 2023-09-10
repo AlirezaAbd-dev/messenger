@@ -28,20 +28,18 @@ export default function RootLayout({
             className={`${myFont.variable} overflow-hidden bg-zinc-800`}
          >
             <TrpcProvider>
-               <TrpcProvider>
-                  <Toaster
-                     position='top-center'
-                     reverseOrder={false}
-                     toastOptions={{
-                        style: {
-                           borderRadius: '17px',
-                           background: '#333',
-                           color: '#fff',
-                        },
-                     }}
-                  />
-                  {children}
-               </TrpcProvider>
+               <Toaster
+                  position='top-center'
+                  reverseOrder={false}
+                  toastOptions={{
+                     style: {
+                        borderRadius: '17px',
+                        background: '#333',
+                        color: '#fff',
+                     },
+                  }}
+               />
+               {children}
             </TrpcProvider>
          </body>
       </html>

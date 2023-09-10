@@ -26,7 +26,6 @@ export const signRouters = router({
 
          // set the random number into cache
          cache.set(email, randomNumber, 600);
-         const cachedEmail = await cache.get<Promise<string>>(email);
 
          try {
             // sending email to user

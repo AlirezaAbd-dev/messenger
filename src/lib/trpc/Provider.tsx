@@ -29,13 +29,13 @@ export default function TrpcProvider({
                   return {
                      'x-auth-token':
                         (localStorage &&
-                           (localStorage?.getItem('x-auth-token') as
+                           (localStorage?.getItem('verify-token') as
                               | string
                               | undefined)) ||
                         '',
                      'x-refresh-token':
                         (localStorage &&
-                           (localStorage?.getItem('x-refresh-token') as
+                           (localStorage?.getItem('refresh-token') as
                               | string
                               | undefined)) ||
                         '',
