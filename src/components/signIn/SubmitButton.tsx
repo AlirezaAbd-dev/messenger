@@ -7,7 +7,6 @@ import { toast } from 'react-hot-toast';
 
 import useSignInStore from '@/zustand/signInStore';
 import { trpc } from '@/lib/trpc/client';
-// import { signInAction } from "@/actions/signInActions";
 
 const SubmitButton = () => {
    const { mutate, isLoading } = trpc.sign.signIn.useMutation({
@@ -49,27 +48,6 @@ const SubmitButton = () => {
       }
       if (email.trim() !== '' && OTP && +OTP >= 99999) {
          mutate({ email, OTP });
-         //  try {
-         // setIsLoading(true);
-         // Sending data to server for signIn
-         // const { message, verifyToken, refreshToken } = await signInAction(
-         //   email,
-         //   OTP
-         // ).then((res) => {
-         //   setIsLoading(false);
-         //   return { ...res };
-         // });
-         // Saving tokens in localStorage and relocate
-         // localStorage.setItem("verify-token", verifyToken);
-         // localStorage.setItem("refresh-token", refreshToken);
-         //     router.replace('/home');
-         //  } catch (err: any) {
-         //     setIsLoading(false);
-         //     console.error(err);
-         //     toast.error(err.message);
-         //  } finally {
-         //     setOTP(null);
-         //  }
       }
    }, [email, OTP, mutate]);
 

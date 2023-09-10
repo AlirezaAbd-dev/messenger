@@ -18,7 +18,7 @@ const useGetConversations = () => {
       socket.on("conversations:getAll", (conversations) => {
         setConversation(
           conversations.map((c) => ({
-            _id: c._id.toString(),
+            id: c.id.toString(),
             lastMessage:
               c.messages.length > 0
                 ? c.messages[c.messages.length - 1].toString()

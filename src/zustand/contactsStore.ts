@@ -1,44 +1,40 @@
-import getContactsAction from "@/actions/getContactsAction";
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+// import getContactsAction from "@/actions/getContactsAction";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+
+import { Contacts } from '@prisma/client';
 
 export interface Contact {
-  name: string;
-  email: string;
-  avatar?: string;
-  _id: string;
+   name: string;
+   email: string;
+   avatar?: string;
+   _id: string;
 }
 
-export interface Contacts {
-  contacts: Contact[];
-  fetchContacts: () => void;
-  error: string;
-  loading: boolean;
+export interface ContactsType {
+   contacts: Contacts[];
+   addAllContacts: (data: Contacts[]) => void;
+   error: string;
+   loading: boolean;
+   setLoading: (loading: boolean) => void;
+   setError: (errorMessage: string) => void;
 }
 
-const useContactsStore = create<Contacts>()(
-  devtools((set, get) => ({
-    loading: false,
-    error: "",
-    contacts: [],
-    async fetchContacts() {
-      try {
-        set({ loading: true });
-        const contacts = await getContactsAction(
-          localStorage.getItem("verify-token")!,
-          localStorage.getItem("refresh-token")!
-        );
-
-        return set({ contacts, error: "", loading: false });
-      } catch (err: any) {
-        if (err)
-          return set({
-            error: err?.response?.data?.message,
-            loading: false,
-          });
-      }
-    },
-  }))
+const useContactsStore = create<ContactsType>()(
+   devtools((set, _get) => ({
+      loading: false,
+      error: '',
+      contacts: [],
+      setLoading(loading: boolean) {
+         set(() => ({ loading }));
+      },
+      setError(errorMessage) {
+         set(() => ({ error: errorMessage }));
+      },
+      addAllContacts(data) {
+         set(() => ({ contacts: data }));
+      },
+   })),
 );
 
 export default useContactsStore;

@@ -1,6 +1,5 @@
 import { TRPCError } from '@trpc/server';
 import { protectedProcedure, router } from '../trpc';
-import { z } from 'zod';
 import contactsValidation from '../validation/contactsValidation';
 
 export const contactRouters = router({
@@ -10,7 +9,7 @@ export const contactRouters = router({
       //   Check the existing of user in database
       const findUser = await ctx.prisma.users.findUnique({
          where: { email },
-         include: { contacts: true },
+         select: { id: true },
       });
 
       if (!findUser) {
@@ -20,7 +19,12 @@ export const contactRouters = router({
          });
       }
 
-      const contacts = findUser.contacts;
+      const contacts = await ctx.prisma.contacts.findMany({
+         where: { usersId: findUser.id },
+         include: {
+            Users: { select: { email: true, id: true, avatar: true } },
+         },
+      });
 
       return { contacts, headers: newHeaders };
    }),

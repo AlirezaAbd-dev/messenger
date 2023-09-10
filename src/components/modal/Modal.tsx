@@ -17,7 +17,7 @@ import useContactsStore from '@/zustand/contactsStore';
 export default function Modal() {
    const [loading, setLoading] = useState(false);
 
-   const fetchContacts = useContactsStore((state) => state.fetchContacts);
+   const fetchContacts = useContactsStore((state) => state.addAllContacts);
 
    const serverAction = useCallback(
       async (name: string, email: string) => {

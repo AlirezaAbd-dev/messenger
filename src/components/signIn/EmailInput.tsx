@@ -1,40 +1,30 @@
 'use client';
 
-import { useEffect } from 'react';
 import { shallow } from 'zustand/shallow';
 import { z } from 'zod';
 import { ScaleLoader } from 'react-spinners';
 import { toast } from 'react-hot-toast';
 
 import useSignInStore from '@/zustand/signInStore';
-// import { sendEmailAction } from '@/actions/signInActions';
 import Icons from '../ui/Icons';
 import { trpc } from '@/lib/trpc/client';
 
 const EmailInput = () => {
-   const { mutate, isSuccess, isLoading, isError, error } =
-      trpc.sign.sendOTP.useMutation();
-
-   //  const [, startTransition] = useTransition();
+   const { mutate, isLoading } = trpc.sign.sendOTP.useMutation({
+      onSuccess() {
+         setIsEmailSet(true);
+         toast.success('ایمیل با موفقیت ارسال شد✅');
+      },
+      onError(err) {
+         startTimer(0);
+         toast.error(err.message);
+      },
+   });
 
    const { email, timer, setEmail, setIsEmailSet, startTimer } = useSignInStore(
       (state) => ({ ...state }),
       shallow,
    );
-
-   useEffect(() => {
-      if (!isLoading && isError) {
-         startTimer(0);
-         toast.error(error.message);
-      }
-   }, [isLoading, isError, error, startTimer]);
-
-   useEffect(() => {
-      if (!isLoading && isSuccess) {
-         setIsEmailSet(true);
-         toast.success('ایمیل با موفقیت ارسال شد✅');
-      }
-   }, [isLoading, isSuccess, setIsEmailSet]);
 
    const sendCodeOnClickHandler = () => {
       const emailValidate = z.string().email();
@@ -43,20 +33,6 @@ const EmailInput = () => {
 
       if (result.success) {
          mutate({ email });
-         //  startTransition(async () => {
-         // sendEmailAction(email)
-         //    .then(() => {
-         //       setIsLoading(false);
-         //       setIsEmailSet(true);
-         //       toast.success('ایمیل با موفقیت ارسال شد');
-         //    })
-         //    .catch((err) => {
-         //       setIsLoading(false);
-         //       startTimer(0);
-         //       console.log(err);
-         //       toast.error(err.message);
-         //    });
-         //  });
       } else {
          toast.error('لطفا ایمیل را به درستی وارد نمایید');
       }
