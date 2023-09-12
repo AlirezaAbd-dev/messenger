@@ -12,7 +12,7 @@ const useGetConversations = () => {
    useEffect(() => {
       setIsLoading(true);
       socket.on('conversations:start', () => {
-         socket.emitWithAck('conversations:getAll').catch((err) => {
+         socket.emitWithAck('conversations:getAll').catch((_err) => {
             socket.timeout(2000).emit('conversations:getAll');
          });
          socket.on('conversations:getAll', (conversations) => {
