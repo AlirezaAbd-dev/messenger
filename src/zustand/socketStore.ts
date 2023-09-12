@@ -9,7 +9,7 @@ interface SocketStore {
    socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 }
 
-const useSocket = create<SocketStore>()((set) => ({
+const useSocket = create<SocketStore>()((_set) => ({
    socket: io('http://localhost:3001', {
       extraHeaders: {
          'x-auth-token': localStorage?.getItem('verify-token')!,
