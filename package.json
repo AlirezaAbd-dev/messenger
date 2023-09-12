@@ -31,6 +31,7 @@
       "eslint": "8.48.0",
       "eslint-config-next": "13.4.19",
       "express": "^4.18.2",
+      "formik": "^2.4.4",
       "jsonwebtoken": "^9.0.2",
       "lucide-react": "^0.274.0",
       "next": "13.4.19",
@@ -51,6 +52,7 @@
       "typescript": "5.2.2",
       "ws": "^8.14.1",
       "zod": "^3.22.2",
+      "zod-formik-adapter": "^1.2.0",
       "zustand": "^4.4.1"
    },
    "devDependencies": {
