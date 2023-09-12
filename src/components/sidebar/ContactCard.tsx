@@ -2,17 +2,14 @@ import Image from 'next/image';
 
 import Avatar from '../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg';
 import Link from 'next/link';
-import { Contacts } from '@prisma/client';
+import { Contacts, Users } from '@prisma/client';
 
-const ContactCard = (props: {
-   contact: Contacts & {
-      Users: {
-         id: string;
-         avatar: string | null;
-         email: string;
-      };
-   };
-}) => {
+export type JoinForUsersType = Pick<Users, 'id'> &
+   Pick<Users, 'avatar'> &
+   Pick<Users, 'email'>;
+export type ContactsJoinUsersType = Contacts & { Users: JoinForUsersType };
+
+const ContactCard = (props: { contact: ContactsJoinUsersType }) => {
    return (
       <Link href={`/home/${props.contact.id}`}>
          <li className='flex cursor-pointer items-center justify-start border-b-2 border-zinc-700 px-4 py-2 transition-colors delay-[40ms] hover:bg-zinc-900'>

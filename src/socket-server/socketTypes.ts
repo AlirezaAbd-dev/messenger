@@ -1,7 +1,8 @@
 import { Conversations } from '@prisma/client';
+import { LastConversationType } from './handlers/conversationHandlers';
 
 export interface ServerToClientEvents {
-   'conversations:getAll': (conversations: Conversations[]) => void;
+   'conversations:getAll': (conversations: LastConversationType[]) => void;
    'conversations:start': () => void;
    'auth-error': (err: string) => void;
    error: (err: string) => void;

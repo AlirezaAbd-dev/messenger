@@ -1,38 +1,38 @@
-import socket from "@/socket";
-import useConversation from "@/zustand/conversationStore";
-import { useEffect } from "react";
-import { shallow } from "zustand/shallow";
+import socket from '@/socket';
+import useConversation from '@/zustand/conversationStore';
+import { useEffect } from 'react';
+import { shallow } from 'zustand/shallow';
 
 const useGetConversations = () => {
-  const [setConversation, setIsLoading] = useConversation(
-    (state) => [state.setConversation, state.setIsLoading],
-    shallow
-  );
+   const [setConversation, setIsLoading] = useConversation(
+      (state) => [state.setConversation, state.setIsLoading],
+      shallow,
+   );
 
-  useEffect(() => {
-    setIsLoading(true);
-    socket.on("conversations:start", () => {
-      socket.emitWithAck("conversations:getAll").catch((err) => {
-        socket.timeout(2000).emit("conversations:getAll");
+   useEffect(() => {
+      setIsLoading(true);
+      socket.on('conversations:start', () => {
+         socket.emitWithAck('conversations:getAll').catch((err) => {
+            socket.timeout(2000).emit('conversations:getAll');
+         });
+         socket.on('conversations:getAll', (conversations) => {
+            const allConversations = conversations.map((c) => ({
+               id: c.id,
+               lastMessage:
+                  c?.messages?.length > 0
+                     ? c.messages[c.messages.length - 1]?.content!
+                     : '',
+               name: c.name,
+               lastMessageDate: new Date(c.updatedAt).toLocaleTimeString('fa'),
+               avatar: c.avatar,
+            }));
+
+            setConversation(allConversations);
+            setIsLoading(false);
+            console.log(conversations);
+         });
       });
-      socket.on("conversations:getAll", (conversations) => {
-        setConversation(
-          conversations.map((c) => ({
-            id: c.id.toString(),
-            lastMessage:
-              c.messages.length > 0
-                ? c.messages[c.messages.length - 1].toString()
-                : "",
-            name: c.name,
-            lastMessageDate: new Date(c.updatedAt).toLocaleTimeString("fa"),
-            avatar: c.avatar,
-          }))
-        );
-        setIsLoading(false);
-        console.log(conversations);
-      });
-    });
-  }, [setIsLoading, setConversation]);
+   }, [setIsLoading, setConversation]);
 };
 
 export default useGetConversations;
