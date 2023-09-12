@@ -86,6 +86,9 @@ dependencies:
   nodemailer:
     specifier: ^6.9.5
     version: 6.9.5
+  persian-rex:
+    specifier: ^2.3.3
+    version: 2.3.3
   postcss:
     specifier: 8.4.29
     version: 8.4.29
@@ -2792,6 +2795,10 @@ packages:
   /path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+    dev: false
+
+  /persian-rex@2.3.3:
+    resolution: {integrity: sha512-XjMb092X/4JQJ1aDjNLxnaREdmvWbTecPj7R/caD2wgO6bezC8GTCK8AeaJriVa039vflwoA3X2X40OQh5pr4g==}
     dev: false
 
   /picocolors@1.0.0:
