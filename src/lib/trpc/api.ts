@@ -6,7 +6,7 @@ import { experimental_nextCacheLink as nextCacheLink } from '@trpc/next/app-dir/
 import SuperJSON from 'superjson';
 import { PrismaClient } from '@prisma/client';
 
-const prismaClient = new PrismaClient();
+const prismaClient = new PrismaClient({ log: ['query', 'error'] });
 
 /**
  * This client invokes procedures directly on the server without fetching over HTTP.

@@ -29,7 +29,6 @@ const useGetConversations = () => {
 
             setConversation(allConversations);
             setIsLoading(false);
-            console.log(conversations);
          });
       });
    }, [setIsLoading, setConversation]);

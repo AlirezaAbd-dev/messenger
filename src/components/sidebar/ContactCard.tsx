@@ -11,7 +11,7 @@ export type ContactsJoinUsersType = Contacts & { Users: JoinForUsersType };
 
 const ContactCard = (props: { contact: ContactsJoinUsersType }) => {
    return (
-      <Link href={`/home/${props.contact.id}`}>
+      <Link href={`/home/${props.contact.id}?contact=true`}>
          <li className='flex cursor-pointer items-center justify-start border-b-2 border-zinc-700 px-4 py-2 transition-colors delay-[40ms] hover:bg-zinc-900'>
             <Image
                src={props.contact?.Users.avatar || Avatar.src}

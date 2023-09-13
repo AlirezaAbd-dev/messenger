@@ -19,10 +19,9 @@ const conversationHandlers = async (
    myEmail: string,
 ) => {
    // Event calls
+   // Finding user in database
    socket.on('conversations:getAll', async () => {
       console.log('finding started!');
-
-      // Finding user in database
       const findUser = await prismaClient.users.findUnique({
          where: { email: myEmail },
          include: { contacts: true },
@@ -89,6 +88,46 @@ const conversationHandlers = async (
          io.to(socket.id).emit('conversations:getAll', []);
       }
    });
+
+   // ----------------------------------------------------
+   const findUser = await prismaClient.users.findUnique({
+      where: { email: myEmail },
+   });
+   const messages = await prismaClient.conversations.findFirst({
+      where: {
+         AND: [
+            {
+               participants: {
+                  some: { id: '008c33f7-2a52-4faf-82c3-820bc31fe365' },
+               },
+            },
+            {
+               participants: {
+                  some: {
+                     id: findUser?.id,
+                  },
+               },
+            },
+         ],
+      },
+   });
+   console.log(messages);
+
+   socket.on(
+      'conversations:getAllMessages',
+      async (id, isSelectedFromContacts) => {
+         const findUser = await prismaClient.users.findUnique({
+            where: { email: myEmail },
+         });
+         if (isSelectedFromContacts) {
+            const messages = await prismaClient.conversations.findFirst({
+               where: {
+                  participants: { some: { id: id, AND: { id: findUser?.id } } },
+               },
+            });
+         }
+      },
+   );
 };
 
 export default conversationHandlers;

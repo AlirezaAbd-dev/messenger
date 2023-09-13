@@ -1,3 +1,5 @@
+'use client';
+
 import { io, Socket } from 'socket.io-client';
 import {
    ClientToServerEvents,
@@ -7,9 +9,10 @@ import {
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
    'http://localhost:3001',
    {
+      reconnection: true,
       extraHeaders: {
-         'x-auth-token': localStorage?.getItem('verify-token')!,
-         'x-refresh-token': localStorage?.getItem('refresh-token')!,
+         'x-auth-token': localStorage?.getItem('verify-token')! || '',
+         'x-refresh-token': localStorage?.getItem('refresh-token')! || '',
       },
       autoConnect: true,
    },

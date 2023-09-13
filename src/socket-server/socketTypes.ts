@@ -10,6 +10,10 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
    'conversations:getAll': () => void;
+   'conversations:getAllMessages': (
+      id: string,
+      isSelectedFromContacts: boolean,
+   ) => void;
 }
 
 export interface SocketData {}

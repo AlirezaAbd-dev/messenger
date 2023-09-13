@@ -1,45 +1,48 @@
 'use client';
-import { Tab } from '@headlessui/react';
-import MainTab from './MainTab';
+
 import ContactsPanel from './ContactsPanel';
 import ConversationsPanel from './ConversationsPanel';
 import useGetConversations from '@/hooks/useGetConversations';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 
-const tabs = [
-   {
-      name: 'مخاطبین',
-   },
-   {
-      name: 'مکالمات',
-   },
-];
+enum TabsEnum {
+   CONVERSATION = 'conversations',
+   CONTACTS = 'CONTACTS',
+}
 
 const TabsSection = () => {
    //! This hook gets all conversations from socket server
    useGetConversations();
 
    return (
-      <Tab.Group defaultIndex={1}>
-         {/* Tabs */}
-         <Tab.List className='flex w-full justify-evenly py-2'>
-            {tabs.map((t, index) => (
-               <MainTab
-                  key={index}
-                  name={t.name}
-               />
-            ))}
-         </Tab.List>
-         <Tab.Panels>
-            <Tab.Panel>
-               {/* Contacts Panel */}
-               <ContactsPanel />
-            </Tab.Panel>
-            <Tab.Panel>
-               {/* Conversation Panel */}
-               <ConversationsPanel />
-            </Tab.Panel>
-         </Tab.Panels>
-      </Tab.Group>
+      <Tabs
+         dir='rtl'
+         defaultValue={TabsEnum.CONVERSATION}
+         className='w-full'
+      >
+         <TabsList className='w-full grid grid-cols-2 bg-zinc-900 text-white'>
+            <TabsTrigger
+               value={TabsEnum.CONTACTS}
+               className='text-yellow-500 data-[state=active]:bg-yellow-500'
+            >
+               مخاطبین
+            </TabsTrigger>
+            <TabsTrigger
+               value={TabsEnum.CONVERSATION}
+               className='text-yellow-500 data-[state=active]:bg-yellow-500'
+            >
+               مکالمات
+            </TabsTrigger>
+         </TabsList>
+         <TabsContent value={TabsEnum.CONTACTS}>
+            {/* Contacts Panel */}
+            <ContactsPanel />
+         </TabsContent>
+         <TabsContent value={TabsEnum.CONVERSATION}>
+            {/* Conversation Panel */}
+            <ConversationsPanel />
+         </TabsContent>
+      </Tabs>
    );
 };
 

@@ -1,12 +1,12 @@
 'use client';
 
 import useOptionStore from '@/zustand/optionsStore';
-import Icons from '../ui/Icons';
 import useContactsStore from '@/zustand/contactsStore';
 import { shallow } from 'zustand/shallow';
 import ContactCard from './ContactCard';
 import { ScaleLoader } from 'react-spinners';
 import { trpc } from '@/lib/trpc/client';
+import { UserPlus } from 'lucide-react';
 
 const ContactsPanel = () => {
    const setIsModalOpen = useOptionStore((state) => state.setIsModalOpen);
@@ -24,7 +24,7 @@ const ContactsPanel = () => {
             onClick={() => setIsModalOpen(true)}
             className='group mx-auto mb-2 flex w-fit rounded-xl border border-yellow-500 p-2 text-yellow-500 transition-all delay-100 hover:-translate-y-1 hover:bg-yellow-500 hover:text-zinc-950'
          >
-            <Icons.AddContactSvg />
+            <UserPlus />
             اضافه کردن مخاطب
          </button>
 
