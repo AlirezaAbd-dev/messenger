@@ -43,7 +43,7 @@ const loginHandler = async (
       }
    }
 
-   socket.emit('conversations:start');
+   socket.emit('conversations:start', findUser?.id!);
 
    return { findUser, myEmail };
 };

@@ -1,3 +1,4 @@
+import { LastConversationType } from '@/socket-server/handlers/conversationHandlers';
 import { create } from 'zustand';
 
 export interface Conversation {
@@ -13,8 +14,8 @@ interface ConversationStore {
    error: string;
    setIsLoading: (loading: boolean) => void;
    setError: (err: string) => void;
-   conversations: Conversation[];
-   setConversation: (conversations: Conversation[]) => void;
+   conversations: LastConversationType[];
+   setConversation: (conversations: LastConversationType[]) => void;
 }
 
 const useConversation = create<ConversationStore>()((set) => ({

@@ -1,16 +1,16 @@
-import {
-   ConversationType,
-   Conversations,
-   Messages,
-   Users,
-} from '@prisma/client';
+import { ConversationType, Conversations } from '@prisma/client';
 import { prismaClient } from '../server';
 import { ConnectedSocket, Io } from '../types';
 
-export type LastConversationType = Conversations & {
-   messages: Messages[];
-   participants: Users[];
+export type LastConversationType = Omit<Conversations, 'name'> & {
+   lastMessage: {
+      content: string;
+      senderName: string;
+      senderId: string;
+      time: Date;
+   };
    type: ConversationType;
+   name: string;
 };
 
 const conversationHandlers = async (
@@ -29,8 +29,21 @@ const conversationHandlers = async (
 
       // Finding all conversations that has somthing to do with that user
       const conversations = await prismaClient.conversations.findMany({
-         where: { participants: { every: { id: findUser?.id } } },
-         include: { participants: true, messages: true },
+         where: { participants: { some: { id: findUser?.id } } },
+         include: {
+            participants: true,
+            messages: {
+               orderBy: { createdAt: 'desc' },
+               take: 1,
+               select: {
+                  content: true,
+                  createdAt: true,
+                  seen: true,
+                  senderId: true,
+                  sender: { select: { name: true } },
+               },
+            },
+         },
       });
 
       console.log('conversations found');
@@ -46,38 +59,28 @@ const conversationHandlers = async (
 
                // Find the other participant's contact data if he/she is in the user's contacts list
                const filteredContact = findUser?.contacts.find(
-                  (c) => c.id === filteredParticipants[0].id,
+                  (c) => c.contactId === filteredParticipants[0].id,
                );
 
                // If he/she is in contacts list then push it to the conversations list
-               if (filteredContact) {
-                  lastConversations.push({
-                     id: conversation.id,
-                     avatar: conversation.avatar,
-                     createdAt: conversation.createdAt,
-                     messages: conversation.messages,
-                     participants: conversation.participants,
-                     type: conversation.type,
-                     updatedAt: conversation.updatedAt,
-                     name: filteredContact.name,
-                  });
-               } else {
-                  // If he/she isn't in contacts list then name him/her on default if has a name or "Unknown User"
-                  const participant = await prismaClient.users.findUnique({
-                     where: { id: filteredParticipants[0].id },
-                  });
-
-                  lastConversations.push({
-                     id: conversation.id,
-                     avatar: conversation.avatar,
-                     createdAt: conversation.createdAt,
-                     messages: conversation.messages,
-                     participants: conversation.participants,
-                     type: conversation.type,
-                     updatedAt: conversation.updatedAt,
-                     name: participant?.name || 'Unknown User',
-                  });
-               }
+               lastConversations.push({
+                  id: conversation.id,
+                  avatar: conversation.avatar,
+                  createdAt: conversation.createdAt,
+                  lastMessage: {
+                     content: conversation.messages[0].content,
+                     senderName:
+                        filteredContact?.name ||
+                        conversation.messages[0].sender.name,
+                     senderId: conversation.messages[0].senderId,
+                     time: conversation.messages[0].createdAt,
+                  },
+                  type: conversation.type,
+                  updatedAt: conversation.updatedAt,
+                  name:
+                     filteredContact?.name ||
+                     conversation.messages[0].sender.name,
+               });
             }
 
             // Send all the conversations to user
@@ -89,29 +92,7 @@ const conversationHandlers = async (
       }
    });
 
-   // ----------------------------------------------------
-   const findUser = await prismaClient.users.findUnique({
-      where: { email: myEmail },
-   });
-   const messages = await prismaClient.conversations.findFirst({
-      where: {
-         AND: [
-            {
-               participants: {
-                  some: { id: '008c33f7-2a52-4faf-82c3-820bc31fe365' },
-               },
-            },
-            {
-               participants: {
-                  some: {
-                     id: findUser?.id,
-                  },
-               },
-            },
-         ],
-      },
-   });
-   console.log(messages);
+   // ---------------------------------------------------
 
    socket.on(
       'conversations:getAllMessages',
@@ -122,7 +103,20 @@ const conversationHandlers = async (
          if (isSelectedFromContacts) {
             const messages = await prismaClient.conversations.findFirst({
                where: {
-                  participants: { some: { id: id, AND: { id: findUser?.id } } },
+                  AND: [
+                     {
+                        participants: {
+                           some: { id: '01a477ae-eac3-4fbf-b193-7adcd095418f' },
+                        },
+                     },
+                     {
+                        participants: {
+                           some: {
+                              id: 'd6052613-89e2-4899-9c73-2c7de4de1d14',
+                           },
+                        },
+                     },
+                  ],
                },
             });
          }

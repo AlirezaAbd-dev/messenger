@@ -12,8 +12,10 @@ import ModalInputs from './ModalInputs';
 import ModalButtons from './ModalButtons';
 import { trpc } from '@/lib/trpc/client';
 import toast from 'react-hot-toast';
+import useOptionStore from '@/zustand/optionsStore';
 
 export default function Modal() {
+   const setIsModalOpen = useOptionStore((state) => state.setIsModalOpen);
    const trpcUtils = trpc.useContext();
    const { mutate, isLoading } = trpc.contact.addContact.useMutation({
       onSuccess(data) {
@@ -21,7 +23,8 @@ export default function Modal() {
             localStorage.setItem('verify-token', data.headers['x-auth-token']);
          }
 
-         trpcUtils.contact.getAllContacts.refetch();
+         trpcUtils.contact.getAllContacts.prefetch();
+         setIsModalOpen(false);
       },
       onError(err) {
          toast.error(err.message);

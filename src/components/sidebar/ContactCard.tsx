@@ -7,14 +7,14 @@ import { Contacts, Users } from '@prisma/client';
 export type JoinForUsersType = Pick<Users, 'id'> &
    Pick<Users, 'avatar'> &
    Pick<Users, 'email'>;
-export type ContactsJoinUsersType = Contacts & { Users: JoinForUsersType };
+export type ContactsJoinUsersType = Contacts & { contact: JoinForUsersType };
 
 const ContactCard = (props: { contact: ContactsJoinUsersType }) => {
    return (
       <Link href={`/home/${props.contact.id}?contact=true`}>
          <li className='flex cursor-pointer items-center justify-start border-b-2 border-zinc-700 px-4 py-2 transition-colors delay-[40ms] hover:bg-zinc-900'>
             <Image
-               src={props.contact?.Users.avatar || Avatar.src}
+               src={props.contact?.contact.avatar || Avatar.src}
                alt='Avatar'
                priority
                width={100}
@@ -25,7 +25,7 @@ const ContactCard = (props: { contact: ContactsJoinUsersType }) => {
                <div className='flex justify-between'>
                   <h3>{props.contact.name}</h3>
                </div>
-               <p className='text-xs'>{props.contact.Users.email}</p>
+               <p className='text-xs'>{props.contact.contact.email}</p>
             </div>
          </li>
       </Link>

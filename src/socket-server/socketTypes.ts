@@ -3,7 +3,7 @@ import { LastConversationType } from './handlers/conversationHandlers';
 
 export interface ServerToClientEvents {
    'conversations:getAll': (conversations: LastConversationType[]) => void;
-   'conversations:start': () => void;
+   'conversations:start': (myId: string) => void;
    'auth-error': (err: string) => void;
    error: (err: string) => void;
 }

@@ -22,8 +22,9 @@ export const contactRouters = router({
       const contacts = await ctx.prisma.contacts.findMany({
          where: { usersId: findUser.id },
          include: {
-            Users: { select: { email: true, id: true, avatar: true } },
+            contact: { select: { email: true, id: true, avatar: true } },
          },
+         orderBy: { name: 'asc' },
       });
 
       return { contacts, headers: newHeaders };

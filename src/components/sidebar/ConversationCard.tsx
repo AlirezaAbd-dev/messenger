@@ -2,10 +2,16 @@ import Image from 'next/image';
 
 import Avatar from '../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg';
 import Link from 'next/link';
-import { Conversation } from '@/zustand/conversationStore';
+import { LastConversationType } from '@/socket-server/handlers/conversationHandlers';
+import getRelativeDate from '@/utils/getRaletiveDate';
 
-const ConversationCard = (props: { conversation: Conversation }) => {
+const ConversationCard = (props: { conversation: LastConversationType }) => {
    const { conversation } = props;
+
+   const lastMessageDate = getRelativeDate(
+      new Date(conversation.lastMessage.time),
+   );
+
    return (
       <Link href={`/home/${conversation.id}`}>
          <li className='flex cursor-pointer items-center justify-start border-b-2 border-zinc-700 px-4 py-2 transition-colors delay-[40ms] hover:bg-zinc-900'>
@@ -23,10 +29,10 @@ const ConversationCard = (props: { conversation: Conversation }) => {
                   {/* Name */}
                   <h3>{conversation.name}</h3>
                   {/* Last Message Date */}
-                  <p>{conversation.lastMessageDate.toString()}</p>
+                  <p className='text-xs'>{lastMessageDate}</p>
                </div>
                {/* Last Message Ellipsis Content */}
-               <p className='text-xs'>{conversation.lastMessage}</p>
+               <p className='text-xs'>{conversation.lastMessage.content}</p>
             </div>
          </li>
       </Link>
