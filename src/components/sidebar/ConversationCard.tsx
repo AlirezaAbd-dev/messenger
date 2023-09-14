@@ -4,9 +4,12 @@ import Avatar from '../../assets/images/vecteezy_abstract-black-gradient-geometr
 import Link from 'next/link';
 import { LastConversationType } from '@/socket-server/handlers/conversationHandlers';
 import getRelativeDate from '@/utils/getRaletiveDate';
+import useOptionStore from '@/zustand/optionsStore';
 
 const ConversationCard = (props: { conversation: LastConversationType }) => {
    const { conversation } = props;
+
+   const myId = useOptionStore((state) => state.myId);
 
    const lastMessageDate = getRelativeDate(
       new Date(conversation.lastMessage.time),
@@ -32,7 +35,13 @@ const ConversationCard = (props: { conversation: LastConversationType }) => {
                   <p className='text-xs'>{lastMessageDate}</p>
                </div>
                {/* Last Message Ellipsis Content */}
-               <p className='text-xs'>{conversation.lastMessage.content}</p>
+               <p className='text-xs'>
+                  {`${
+                     conversation.lastMessage.senderId === myId
+                        ? 'شما'
+                        : conversation.lastMessage.senderName
+                  }: ${conversation.lastMessage.content}`}
+               </p>
             </div>
          </li>
       </Link>
