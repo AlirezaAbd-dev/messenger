@@ -27,10 +27,16 @@ const ConversationChat = () => {
    const isSelectedFromContacts = !!searchParams.get('contact');
 
    useEffect(() => {
-      socket.emit('conversations:getAllMessages', id, isSelectedFromContacts);
-      socket.on('conversations:getAllMessages', (conversation) => {
-         setConversationWithMessages(conversation);
-         setSelectedConversation(getConversationById(conversation?.id!));
+      socket.on('conversations:start', () => {
+         socket.emit(
+            'conversations:getAllMessages',
+            id,
+            isSelectedFromContacts,
+         );
+         socket.on('conversations:getAllMessages', (conversation) => {
+            setConversationWithMessages(conversation);
+            setSelectedConversation(getConversationById(conversation?.id!));
+         });
       });
    }, [
       id,

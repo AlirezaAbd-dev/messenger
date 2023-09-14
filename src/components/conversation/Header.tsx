@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { MoreVertical } from 'lucide-react';
 
 import Avatar from '../../assets/images/vecteezy_abstract-black-gradient-geometric-shape-background_6644317.jpg';
-// import Icons from "../ui/Icons";
+import getRelativeDate from '@/utils/getRaletiveDate';
 
 type HeaderProps = {
    name?: string;
@@ -25,14 +25,15 @@ const Header = (props: HeaderProps) => {
             <div>
                <h3>{props.name}</h3>
                <p className='text-xs text-gray-400'>
-                  آخرین بازدید {props.lastSeen?.toString()}
+                  آخرین بازدید{' '}
+                  {props.lastSeen &&
+                     getRelativeDate(new Date(props.lastSeen.toString()))}
                </p>
             </div>
          </div>
          {/* Options */}
          <div className='mx-2 flex'>
             <MoreVertical className='cursor-pointer p-1 w-8 h-8 rounded-full hover:bg-yellow-500 hover:text-black' />
-            {/* <Icons.OptionsIconSvg /> */}
          </div>
       </header>
    );

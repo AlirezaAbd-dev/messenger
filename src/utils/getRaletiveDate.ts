@@ -1,4 +1,6 @@
-export default function getRelativeDate(time: Date) {
+export default function getRelativeDate(time: Date | undefined) {
+   if (!time) return;
+
    const timeRelative = new Intl.RelativeTimeFormat('fa', { numeric: 'auto' });
 
    const now = new Date();
