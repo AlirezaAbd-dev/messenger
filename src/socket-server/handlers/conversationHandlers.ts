@@ -99,29 +99,52 @@ const conversationHandlers = async (
       async (id, isSelectedFromContacts) => {
          const findUser = await prismaClient.users.findUnique({
             where: { email: myEmail },
+            include: { contacts: { select: { id: true, name: true } } },
          });
          if (isSelectedFromContacts) {
-            const messages = await prismaClient.conversations.findFirst({
+            const contact = await prismaClient.contacts.findUnique({
+               where: { id },
+               select: { contactId: true },
+            });
+            const conversation = await prismaClient.conversations.findFirst({
                where: {
                   AND: [
                      {
                         participants: {
-                           some: { id: '01a477ae-eac3-4fbf-b193-7adcd095418f' },
+                           some: { id: findUser?.id },
                         },
                      },
                      {
                         participants: {
                            some: {
-                              id: 'd6052613-89e2-4899-9c73-2c7de4de1d14',
+                              id:
+                                 contact?.contactId === findUser?.id
+                                    ? ''
+                                    : contact?.contactId,
                            },
                         },
                      },
                   ],
                },
+               include: {
+                  messages: { orderBy: { createdAt: 'desc' }, take: 30 },
+                  participants: { select: { id: true } },
+               },
             });
+
+            conversation?.messages.reverse();
+            if (conversation?.type === 'PRIVATE') {
+               const contactName = findUser?.contacts.find((c) => c.id === id);
+               if (contactName != null) {
+                  conversation.name = contactName.name;
+               }
+            }
+            socket.emit('conversations:getAllMessages', conversation);
          }
       },
    );
+
+   //--------------------------------------------------------
 };
 
 export default conversationHandlers;

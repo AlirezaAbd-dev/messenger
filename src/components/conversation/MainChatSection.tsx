@@ -2,12 +2,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ChatCards from './ChatCards';
 import Icons from '../ui/Icons';
-import { useSearchParams } from 'next/navigation';
 
 const MainChatSection = () => {
    const [isScrollBottom, setIsScrollBottom] = useState(true);
-   const params = useSearchParams();
-   console.log(params.get('contact'));
 
    const scrollRef = useRef<HTMLElement>(null);
 

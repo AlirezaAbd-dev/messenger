@@ -34,7 +34,7 @@ const ConversationCard = (props: { conversation: LastConversationType }) => {
                   {/* Last Message Date */}
                   <p className='text-xs'>{lastMessageDate}</p>
                </div>
-               {/* Last Message Ellipsis Content */}
+               {/* Last Message Content */}
                <p className='text-xs'>
                   {`${
                      conversation.lastMessage.senderId === myId
